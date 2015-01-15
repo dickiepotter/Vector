@@ -1,4 +1,4 @@
-# A Vector Type for C#
+# A Vector Type for C\#
 
 A guide through a Vector type in C# using Cartesian and Euclidian Geometry
 
