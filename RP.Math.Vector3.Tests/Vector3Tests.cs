@@ -151,5 +151,58 @@
 
         #endregion
 
+        #region Angle Tests
+
+        [TestMethod]
+        public void AngelOfTwoVectorsUsingWholeNumbersResultingIn90DegTest()
+        {
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(0, 1, 0);
+            var angle = a.Angle(b);
+
+            angle.Should().Be(System.Math.PI /2);
+        }
+
+        [TestMethod]
+        public void AngelOfTwoPerpendicularVectorsUsingWholeNumbers()
+        {
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(-1, 0, 0);
+            var angle = a.Angle(b);
+
+            angle.Should().Be(System.Math.PI);
+        }
+
+        [TestMethod]
+        public void AngelOfTwoVectorsUsingWholeNumbersResultingIn180DegTest()
+        {
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(-1, 0, 0);
+            var angle = a.Angle(b);
+
+            angle.Should().Be(System.Math.PI);
+        }
+
+        [TestMethod]
+        public void AngleOfIdenticalVectorsUsingWholeNumbersTest()
+        {
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(1, 0, 0);
+            var angle = a.Angle(b);
+
+            angle.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void AngleOfIdenticalVectorsUsingLongFloatingPointNumbersTest()
+        {
+            var a = new Vector3(0.795271508195995f, -0.0612034045226753f, -0.603156175071185f);
+            var b = new Vector3(0.795271508195995f, -0.0612034045226753f, -0.603156175071185f);
+            var angle = a.Angle(b);
+
+            angle.Should().Be(0);
+        }
+
+        #endregion
     }
 }
