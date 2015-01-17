@@ -75,5 +75,81 @@
         }
 
         #endregion
+
+        #region Add and Subtract tests
+
+        [TestMethod]
+        public void AddUsingWholeNumbersTest()
+        {
+            var a = new Vector3(3, 7, 4);
+            var b = new Vector3(2, 9, 11);
+            var result = a + b;
+
+            result.X.Should().Be(5);
+            result.Y.Should().Be(16);
+            result.Z.Should().Be(15);
+        }
+
+        [TestMethod]
+        public void SubtractUingWholeNumbersTest()
+        {
+            var a = new Vector3(1, 2, 3);
+            var b = new Vector3(3, 3, 3);
+            var result = a - b;
+
+            result.X.Should().Be(-2);
+            result.Y.Should().Be(-1);
+            result.Z.Should().Be(-0);
+        }
+
+        #endregion
+
+        #region Cross and dot product tests
+
+        [TestMethod]
+        public void DotProductUsingWholeNumbersTest()
+        {
+            var a = new Vector3(12, 20, 0);
+            var b = new Vector3(16, -5, 0);
+
+            a.DotProduct(b).Should().Be(92);
+        }
+
+        [TestMethod]
+        public void CrossProductUsingWholeNumbersTest()
+        {
+            var a = new Vector3(4, 1, 0);
+            var b = new Vector3(-5, 6, 0);
+            var result = a.CrossProduct(b);
+
+            result.X.Should().Be(0);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(29);
+        }
+
+        #endregion
+
+        #region Magnitude tests
+
+        [TestMethod]
+        public void MagnitudeUsingPositiveAndNegativeWholeNumberParametersTest()
+        {
+            var vector = new Vector3(3, 1, -1);
+            var magnitude = vector.Magnitude;
+
+            magnitude.Should().Be(System.Math.Sqrt(11));
+        }
+
+        [TestMethod]
+        public void MagnitudeUsingPositiveWholeNumberParametersTest()
+        {
+            var vector = new Vector3(2, 3, 4);
+            var magnitude = vector.Magnitude;
+
+            magnitude.Should().Be(System.Math.Sqrt(29));
+        }
+
+        #endregion
+
     }
 }
