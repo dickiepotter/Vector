@@ -203,6 +203,28 @@
             angle.Should().Be(0);
         }
 
+        [TestMethod]
+        public void AngleOfVectorsUsingLongFloatingPointNumbersThatShouldNotResultInNaNTest()
+        {
+            var a = new Vector3(0.795271508195995f, -0.0612034045226753f, -0.603156175071185f);
+            var b = new Vector3(0.795271508449802f, -0.0612033993276936f, -0.60315617526368f);
+            var angle = a.Angle(b);
+
+            angle.Should().NotBe(float.NaN);
+            angle.Should().BeLessThan(1);
+            angle.Should().BeGreaterThan(0);
+        }
+
+        [TestMethod]
+        public void AngleOfIdenticalVectorsUsingMaxAndMinFloatingPointNumbersTest()
+        {
+            var a = new Vector3(float.MaxValue, float.MinValue, 0);
+            var b = new Vector3(float.MaxValue, float.MinValue, 0);
+            var angle = a.Angle(b);
+
+            angle.Should().Be(0);
+        }
+
         #endregion
     }
 }
