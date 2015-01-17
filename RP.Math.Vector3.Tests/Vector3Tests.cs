@@ -7,6 +7,8 @@
     [TestClass]
     public class Vector3Tests
     {
+        private static readonly double Deg90AsRad = System.Math.PI / 2;
+
         #region Constructor tests
 
         [TestMethod]
@@ -50,28 +52,39 @@
 
         #endregion
 
-        #region Square and Square-Root Tests
+        #region Square, Square-Root and Pow Tests
 
         [TestMethod]
         public void SquareComponentsTest()
         {
             var vector = new Vector3(2, 3, 4);
-            vector.SqrComponents();
+            var result = vector.SqrComponents();
 
-            vector.X.Should().Be(4);
-            vector.Y.Should().Be(9);
-            vector.Z.Should().Be(16);
+            result.X.Should().Be(4);
+            result.Y.Should().Be(9);
+            result.Z.Should().Be(16);
         }
 
         [TestMethod]
         public void SquareRootComponentsTest()
         {
             var vector = new Vector3(4, 9, 16);
-            vector.SqrtComponents();
+            var result = vector.SqrtComponents();
 
-            vector.X.Should().Be(2);
-            vector.Y.Should().Be(3);
-            vector.Z.Should().Be(4);
+            result.X.Should().Be(2);
+            result.Y.Should().Be(3);
+            result.Z.Should().Be(4);
+        }
+
+        [TestMethod]
+        public void PowComponentsTest()
+        {
+            var vector = new Vector3(2, 1, 3);
+            var result = vector.PowComponents(2);
+
+            result.X.Should().Be(4);
+            result.Y.Should().Be(1);
+            result.Z.Should().Be(9);
         }
 
         #endregion
@@ -160,7 +173,7 @@
             var b = new Vector3(0, 1, 0);
             var angle = a.Angle(b);
 
-            angle.Should().Be(System.Math.PI /2);
+            angle.Should().Be(Deg90AsRad);
         }
 
         [TestMethod]
@@ -203,11 +216,43 @@
             angle.Should().Be(0);
         }
 
+        /// <summary>
+        /// Check that the angle between two vectors does not result in NaN
+        /// When using a floating point number with positive and negative values as data type float
+        /// </summary>
+        /// <acknowlagement>Based on an example issue and solution from Dennis E. Cox (In comments on CodeProject, http://www.codeproject.com/Articles/17425/A-Vector-Type-for-C )</acknowlagement>
         [TestMethod]
         public void AngleOfVectorsUsingLongFloatingPointNumbersThatShouldNotResultInNaNTest()
         {
             var a = new Vector3(0.795271508195995f, -0.0612034045226753f, -0.603156175071185f);
             var b = new Vector3(0.795271508449802f, -0.0612033993276936f, -0.60315617526368f);
+            var angle = a.Angle(b);
+
+            angle.Should().NotBe(float.NaN);
+            angle.Should().BeLessThan(1);
+            angle.Should().BeGreaterThan(0);
+        }
+
+        [TestMethod]
+        public void AngleOfIdenticalVectorsUsingDoubleFloatingPointNumbersTest()
+        {
+            var a = new Vector3(0.795271508195995d, -0.0612034045226753d, -0.603156175071185d);
+            var b = new Vector3(0.795271508195995d, -0.0612034045226753d, -0.603156175071185d);
+            var angle = a.Angle(b);
+
+            angle.Should().Be(0);
+        }
+
+        /// <summary>
+        /// Check that the angle between two vectors does not result in NaN
+        /// When using a floating point number with positive and negative values as data type double
+        /// </summary>
+        /// <acknowlagement>Based on an example issue and solution from Dennis E. Cox (In comments on CodeProject, http://www.codeproject.com/Articles/17425/A-Vector-Type-for-C )</acknowlagement>
+        [TestMethod]
+        public void AngleOfVectorsUsingDoubleFloatingPointNumbersThatShouldNotResultInNaNTest()
+        {
+            var a = new Vector3(0.795271508195995d, -0.0612034045226753d, -0.603156175071185d);
+            var b = new Vector3(0.795271508449802d, -0.0612033993276936d, -0.60315617526368d);
             var angle = a.Angle(b);
 
             angle.Should().NotBe(float.NaN);
@@ -223,6 +268,71 @@
             var angle = a.Angle(b);
 
             angle.Should().Be(0);
+        }
+
+        #endregion
+
+        #region Normalize
+
+        /// <summary>
+        /// Test the normalization of a vector
+        /// </summary>
+        /// <acknowlagement>Example from http://www.fundza.com/vectors/normalize/ </acknowlagement>
+        [TestMethod]
+        public void NormalizeTest()
+        {
+            var vector = new Vector3(3, 1, 2);
+            var result = vector.Normalize();
+
+            result.X.Should().BeInRange(0.8014, 0.8026);
+            result.Y.Should().BeInRange(0.2664, 0.2676);
+            result.Z.Should().BeInRange(0.5334, 0.5346);
+        }
+
+        #endregion
+
+        #region Yaw, Pitch, Roll Tests
+
+        /// <summary>
+        /// Yaw 90 degrees (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void YawTest()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var result = vector.Yaw(Deg90AsRad);
+
+            System.Math.Round(result.X, 6).Should().Be(0);
+            System.Math.Round(result.Y, 6).Should().Be(0);
+            System.Math.Round(result.Z, 6).Should().Be(-1);
+        }
+
+        /// <summary>
+        /// Pitch 90 degrees (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void PitchTest()
+        {
+            var vector = new Vector3(0, 1, 0);
+            var result = vector.Pitch(Deg90AsRad);
+
+            System.Math.Round(result.X, 6).Should().Be(0);
+            System.Math.Round(result.Y, 6).Should().Be(0);
+            System.Math.Round(result.Z, 6).Should().Be(1);
+        }
+
+        /// <summary>
+        /// Roll 90 degrees (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void RollTest()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var result = vector.Roll(Deg90AsRad);
+
+            System.Math.Round(result.X, 6).Should().Be(0);
+            System.Math.Round(result.Y, 6).Should().Be(1);
+            System.Math.Round(result.Z, 6).Should().Be(0);
         }
 
         #endregion
