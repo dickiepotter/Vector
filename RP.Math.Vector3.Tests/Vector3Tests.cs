@@ -162,6 +162,50 @@
             magnitude.Should().Be(System.Math.Sqrt(29));
         }
 
+        /// <summary>
+        /// Test scaling a vector with X component only
+        /// </summary>
+        [TestMethod]
+        public void ScaleXTest()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var result = vector.Scale(10);
+
+            result.X.Should().Be(10);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        /// <summary>
+        /// Test scaling a vector with Y component only
+        /// </summary>
+        [TestMethod]
+        public void ScaleYTest()
+        {
+            var vector = new Vector3(0, 1, 0);
+            var result = vector.Scale(10);
+
+            result.X.Should().Be(0);
+            result.Y.Should().Be(10);
+            result.Z.Should().Be(0);
+        }
+
+        /// <summary>
+        /// Test scaling a vector with X and Z components (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void ScaleXZTest()
+        {
+            var vector = new Vector3(1, 0, 1);
+            var result = vector.Scale(10);
+
+            var expected = System.Math.Round(5 * System.Math.Sqrt(2), 6);
+
+            System.Math.Round(result.X, 6).Should().Be(expected);
+            result.Y.Should().Be(0);
+            System.Math.Round(result.Z, 6).Should().Be(expected);
+        }
+
         #endregion
 
         #region Angle Tests
@@ -230,7 +274,7 @@
 
             angle.Should().NotBe(float.NaN);
             angle.Should().BeLessThan(1);
-            angle.Should().BeGreaterThan(0);
+            angle.Should().BeGreaterOrEqualTo(0);
         }
 
         [TestMethod]
@@ -257,7 +301,7 @@
 
             angle.Should().NotBe(float.NaN);
             angle.Should().BeLessThan(1);
-            angle.Should().BeGreaterThan(0);
+            angle.Should().BeGreaterOrEqualTo(0);
         }
 
         [TestMethod]
@@ -333,6 +377,69 @@
             System.Math.Round(result.X, 6).Should().Be(0);
             System.Math.Round(result.Y, 6).Should().Be(1);
             System.Math.Round(result.Z, 6).Should().Be(0);
+        }
+
+        #endregion
+
+        #region Project, Rejection and Reflection Tests
+
+        /// <summary>
+        /// Test the projection of one vector onto another
+        /// </summary>
+        /// <acknowlagement>Example from http://www.vitutor.com/geometry/vec/vector_projection.html </acknowlagement>
+        [TestMethod]
+        public void ProjectionTest()
+        {
+            var a = new Vector3(2, 1, 0);
+            var b = new Vector3(-3, 4, 0);
+            var result = a.Projection(b);
+
+            result.X.Should().Be(6d/25d, "X should be 6/25");
+            result.Y.Should().Be(-(8d/25d), "Y should be -(8/25)");
+            result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        /// <summary>
+        /// Test the projection of one vector onto another at 90 deg is 0
+        /// </summary>
+        /// <acknowlagement>Example from http://en.wikipedia.org/wiki/Vector_projection </acknowlagement>
+        [TestMethod]
+        public void ProjectionWhereVectorsAreAt90DegTest()
+        {
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(0, 1, 0);
+            var result = a.Projection(b);
+
+            result.X.Should().Be(0, "X should be 0");
+            result.Y.Should().Be(0, "Y should be 0");
+            result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        /// <summary>
+        /// Test the rejection of one vector onto another
+        /// </summary>
+        [TestMethod]
+        public void RejectionTest()
+        {
+            var a = new Vector3(2, 1, 0);
+            var b = new Vector3(-3, 4, 0);
+            var result = a.Rejection(b);
+
+            result.X.Should().Be(2d -(6d / 25d), "X should be 2-(6/25)");
+            result.Y.Should().Be(1d +(8d / 25d), "Y should be 1+(8/25)");
+            result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        [TestMethod]
+        public void ReflectionTest()
+        {
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(0, 1, 0);
+            var result = a.Reflection(b);
+
+            result.X.Should().Be(-1, "X should be -1");
+            result.Y.Should().Be(0, "Y should be 0");
+            result.Z.Should().Be(0, "Z should be 0");
         }
 
         #endregion
