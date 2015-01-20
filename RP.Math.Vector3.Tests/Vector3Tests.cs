@@ -1,5 +1,7 @@
 ﻿namespace RP.Math.Tests
 {
+    using System;
+
     using FluentAssertions;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -440,6 +442,21 @@
             result.X.Should().Be(-1, "X should be -1");
             result.Y.Should().Be(0, "Y should be 0");
             result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        #endregion
+
+        #region Rounding
+
+        [TestMethod]
+        public void RoundingTest()
+        {
+            var vector = new Vector3(0.1, 0.5, 0.9);
+            var result = vector.Round(MidpointRounding.AwayFromZero);
+
+            result.X.Should().Be(0, "X should be rounded down");
+            result.Y.Should().Be(1, "Y should be rounded up");
+            result.Y.Should().Be(1, "Z should be rounded up");
         }
 
         #endregion
