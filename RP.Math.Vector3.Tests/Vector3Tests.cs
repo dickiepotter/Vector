@@ -144,7 +144,7 @@
 
         #endregion
 
-        #region Magnitude tests
+            #region Magnitude tests
 
         [TestMethod]
         public void MagnitudeUsingPositiveAndNegativeWholeNumberParametersTest()
@@ -446,7 +446,7 @@
 
         #endregion
 
-        #region Rounding
+        #region Rounding Tests
 
         [TestMethod]
         public void RoundingTest()
@@ -457,6 +457,50 @@
             result.X.Should().Be(0, "X should be rounded down");
             result.Y.Should().Be(1, "Y should be rounded up");
             result.Y.Should().Be(1, "Z should be rounded up");
+        }
+
+        #endregion
+
+        #region Rotation Tests
+
+        [TestMethod]
+        public void RotateArroundYAxisShouldBeTheSameAsYawTest()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var yaw = vector.Yaw(Deg90AsRad);
+            var rotate = vector.RotateY(Deg90AsRad);
+
+            rotate.Should().Be(yaw);
+        }
+
+        /// <summary>
+        /// Pitch 90 degrees (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void RotateArroundXAxisShouldBeTheSameAsPitchTest()
+        {
+            var vector = new Vector3(0, 1, 0);
+            var pitch = vector.Pitch(Deg90AsRad);
+            var rotate = vector.RotateX(Deg90AsRad);
+
+            System.Math.Round(pitch.X, 6).Should().Be(0);
+            System.Math.Round(pitch.Y, 6).Should().Be(0);
+            System.Math.Round(pitch.Z, 6).Should().Be(1);
+
+            rotate.Should().Be(pitch);
+        }
+
+        /// <summary>
+        /// Roll 90 degrees (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void RotateArroundZShouldBeTheSameAsRollTest()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var roll = vector.Roll(Deg90AsRad);
+            var rotate = vector.RotateZ(Deg90AsRad);
+
+            rotate.Should().Be(roll);
         }
 
         #endregion
