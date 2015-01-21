@@ -144,7 +144,7 @@
 
         #endregion
 
-            #region Magnitude tests
+        #region Magnitude tests
 
         [TestMethod]
         public void MagnitudeUsingPositiveAndNegativeWholeNumberParametersTest()
@@ -499,6 +499,46 @@
             var vector = new Vector3(1, 0, 0);
             var roll = vector.Roll(Deg90AsRad);
             var rotate = vector.RotateZ(Deg90AsRad);
+
+            rotate.Should().Be(roll);
+        }
+
+        [TestMethod]
+        public void RotateArroundYWith0OffsetParametersAxisShouldBeTheSameAsYawTest()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var yaw = vector.Yaw(Deg90AsRad);
+            var rotate = vector.RotateY(0, 0, Deg90AsRad);
+
+            rotate.Should().Be(yaw);
+        }
+
+        /// <summary>
+        /// Pitch 90 degrees (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void RotateArroundXAxis0OffsetParametersShouldBeTheSameAsPitchTest()
+        {
+            var vector = new Vector3(0, 1, 0);
+            var pitch = vector.Pitch(Deg90AsRad);
+            var rotate = vector.RotateX(0, 0, Deg90AsRad);
+
+            System.Math.Round(pitch.X, 6).Should().Be(0);
+            System.Math.Round(pitch.Y, 6).Should().Be(0);
+            System.Math.Round(pitch.Z, 6).Should().Be(1);
+
+            rotate.Should().Be(pitch);
+        }
+
+        /// <summary>
+        /// Roll 90 degrees (checking the result to six decimal places)
+        /// </summary>
+        [TestMethod]
+        public void RotateArroundZ0OffsetParametersShouldBeTheSameAsRollTest()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var roll = vector.Roll(Deg90AsRad);
+            var rotate = vector.RotateZ(0, 0, Deg90AsRad);
 
             rotate.Should().Be(roll);
         }
