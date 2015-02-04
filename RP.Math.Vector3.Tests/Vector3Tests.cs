@@ -54,6 +54,18 @@
 
         #endregion
 
+        #region Abs Tests
+
+        [TestMethod]
+        public void AbsOfVector000Is0Test()
+        {
+            var vector = new Vector3(0, 0, 0);
+            var result = vector.Abs();
+            result.Should().Be(0);
+        }
+
+        #endregion
+
         #region Square, Square-Root and Pow Tests
 
         [TestMethod]
@@ -316,6 +328,17 @@
             angle.Should().Be(0);
         }
 
+        [TestMethod]
+        public void AngleUsingDifferentWholeNumbersResultingInAFractionalNumberTest()
+        {
+            Vector3 s0 = new Vector3(7719, 0, 38);
+            Vector3 s1 = new Vector3(38, 0, 7719);
+            var result = s0.Angle(s1);
+
+            result.Should().Be(1.560950571379345, "this was the result worked out by Pex");
+            Math.Round(result, 3, MidpointRounding.AwayFromZero).Should().Be(1.561d, @"this is what http://calculator.tutorvista.com/angle-between-two-vectors-calculator.html worked out the result to be");
+        }
+
         #endregion
 
         #region Normalize
@@ -541,6 +564,30 @@
             var rotate = vector.RotateZ(0, 0, Deg90AsRad);
 
             rotate.Should().Be(roll);
+        }
+
+        #endregion
+
+        #region Comparison Tests
+
+        [TestMethod]
+        public void CompareToTest()
+        {
+            // Magnitude 8555.6321215910166084530447384188
+            Vector3 s0 = new Vector3(1796, 0, 8365);
+            object box = (object)(s0);
+
+            // Magnitude 2404.1643038694339619441734523204
+            Vector3 s1 = new Vector3(449, 2282, 609);
+
+            var result = s0.CompareTo(s1);
+            result.Should().Be(1, "magnitude of s0 is bigger than magnitude of s1");
+
+            result = s1.CompareTo(s0);
+            result.Should().Be(-1, "magnitude of s1 is less than magnitude of s0");
+
+            result = s1.CompareTo(box);
+            result.Should().Be(-1, "magnitude of s1 is less than magnitude of s0 even when s0 has been cast to an object");
         }
 
         #endregion
