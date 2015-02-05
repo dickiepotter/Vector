@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RP.Math.Vector3")]
 [assembly: AssemblyDescription("A Vector Type for C#")]
 [assembly: AssemblyProduct("RP.Math.Vector3")]
-[assembly: AssemblyCopyright("Copyright ©  2004")]
+[assembly: AssemblyCopyright("Copyright Richard Potter 2004")]
 
 [assembly: ComVisible(false)]
 
@@ -13,6 +13,5 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.2.0.0")]
 [assembly: AssemblyFileVersion("1.2.0.0")]
-[assembly: InternalsVisibleTo("RP.Math.Vector31.Tests")]
-[assembly: InternalsVisibleTo("RP.Math.Vector3.Explorables")]
+[assembly: InternalsVisibleTo("RP.Math.Vector3.Tests")]
 
