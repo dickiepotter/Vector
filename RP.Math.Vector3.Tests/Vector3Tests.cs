@@ -24,8 +24,8 @@
 
         [TestMethod]
         public void ConstructionWithAVector3ParameterTest()
-        { 
-            var vector = new Vector3( new Vector3(100, -100, 0));
+        {
+            var vector = new Vector3(new Vector3(100, -100, 0));
 
             vector.X.Should().Be(100);
             vector.Y.Should().Be(-100);
@@ -46,7 +46,7 @@
         public void ConstructorWithNoParametersTest()
         {
             var vector = new Vector3();
-            
+
             vector.X.Should().Be(0);
             vector.Y.Should().Be(0);
             vector.Z.Should().Be(0);
@@ -419,8 +419,8 @@
             var b = new Vector3(-3, 4, 0);
             var result = a.Projection(b);
 
-            result.X.Should().Be(6d/25d, "X should be 6/25");
-            result.Y.Should().Be(-(8d/25d), "Y should be -(8/25)");
+            result.X.Should().Be(6d / 25d, "X should be 6/25");
+            result.Y.Should().Be(-(8d / 25d), "Y should be -(8/25)");
             result.Z.Should().Be(0, "Z should be 0");
         }
 
@@ -450,8 +450,8 @@
             var b = new Vector3(-3, 4, 0);
             var result = a.Rejection(b);
 
-            result.X.Should().Be(2d -(6d / 25d), "X should be 2-(6/25)");
-            result.Y.Should().Be(1d +(8d / 25d), "Y should be 1+(8/25)");
+            result.X.Should().Be(2d - (6d / 25d), "X should be 2-(6/25)");
+            result.Y.Should().Be(1d + (8d / 25d), "Y should be 1+(8/25)");
             result.Z.Should().Be(0, "Z should be 0");
         }
 
@@ -588,6 +588,265 @@
 
             result = s1.CompareTo(box);
             result.Should().Be(-1, "magnitude of s1 is less than magnitude of s0 even when s0 has been cast to an object");
+        }
+
+        #endregion
+
+        #region Equality
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equality_WhereTheComponentsAreEqual_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, 3);
+
+            var result = s1.Equals(s2);
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equality_WhereXYZOrderIsImportantAndTheComponentAreNotInTheCorrectOrder_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(3, 2, 1);
+
+            var result = s1.Equals(s2);
+
+            result.Should().Be(false);
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equality_WhereZComponentsArePositiveInfinity_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.PositiveInfinity);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2);
+
+            // Test our assumption about the .Net framework expectations
+            double.PositiveInfinity.Equals(double.PositiveInfinity).Should().Be(true, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wront then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "z components of positive infinty and positive infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "positive infinty and positive infinty should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equality_WhereZComponentsAreNegativeInfinity_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.NegativeInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.NegativeInfinity);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2);
+
+            // Test our assumption about the .Net framework expectations
+            double.NegativeInfinity.Equals(double.NegativeInfinity).Should().Be(true, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the.Net framework
+            zComponentResult.Should().Be(true, "z components of negative infinty and negative infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "negative infinty and negative infinty should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityWithTolerance_WhereTheZComponentsAreDifferentByLessThanTheTolerance_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, 2.9999);
+
+            var result = s1.Equals(s2, 0.0002);
+
+            // Quick test to ensure that the double minus operation does not introduce an unexpected margin of error that is higher than our margin of error
+            (3d - (2.9999d)).Should().BeLessThan(0.0002d, "the double calculations of 3 minus 2.9999 should be less than 0.0002 or our test is incorrect");
+            
+            // Assert our acual test
+            result.Should().Be(true, "the tolerance should have been greter than the difference between the z components for s1 and s2");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityWithTolerance_WhereZComponentDifferenceIsGreaterThanTheTolerance_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, 2.9999);
+
+            var result = s1.Equals(s2, 0.00009);
+
+            // Quick test to ensure that the double minus operation does not introduce an unexpected margin of error
+            (3d - 2.9999d).Should().BeGreaterThan(0.00009d, "the double calculations of 3 minus 2.9999 should be greater than 0.00009 or our test is incorrect");
+
+            result.Should().Be(false, "the tolerance should be less than the difference between the z components for s1 and s2");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityWithTolerance_WhereZComponentsArePositiveInfinity_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.PositiveInfinity);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2, 0.00001);
+
+            // Test our assumption about the .Net framework expectations
+            double.PositiveInfinity.Equals(double.PositiveInfinity).Should().Be(true, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wront then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "positive infinty and positive infinty should be equal regardless of tolerance");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "positive infinty and positive infinty should be equal regardless of tolerance");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityWithTolerance_WhereZComponentsAreNegativeInfinity_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.NegativeInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.NegativeInfinity);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2, 0.00001);
+
+            // Test our assumption about the .Net framework expectations
+            double.NegativeInfinity.Equals(double.NegativeInfinity).Should().Be(true, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "negative infinty and negative infinty should be equal regardless of tolerance");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "the two vectors should be equal given negative infinty and negative infinty should be equal regardless of tolerance");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityWithTolerance_WhereZComponentsArePositiveInfinityAndNegativeInfinity_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.NegativeInfinity);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2, 0.00001);
+
+            // Test our assumption about the .Net framework expectations
+            double.PositiveInfinity.Equals(double.NegativeInfinity).Should().Be(false, "the .Net framework should find double positive infinty not equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(false, "positive infinty and negative infinty should not be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(false, "the two vectors should not be equal given positive infinty and negative infinty should not be equal");
+        }
+
+        #endregion
+
+        #region Is Unit Vector Tests
+
+        [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVector_x1y0z0_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 0, 0);
+            var result = s1.IsUnitVector();
+
+            result.Should().Be(true, "vector (1,0,0) is a unit vector");
+        }
+
+        [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVector_WhereXYZAreOne_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 1, 1);
+            var result = s1.IsUnitVector();
+
+            result.Should().Be(false, "vector (1,1,1) is not a unit vector");
+        }
+
+        [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVector_WhereZComponentIsPositiveInfinity_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.PositiveInfinity);
+            var result = s1.IsUnitVector();
+
+            result.Should().Be(false, "vector (0,0, +Inf) is not a unit vector");
+        }
+
+        [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVector_WhereZComponentIsNegativeInfinity_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.NegativeInfinity);
+            var result = s1.IsUnitVector();
+
+            result.Should().Be(false, "vector (0,0, -Inf) is not a unit vector");
+        }
+
+        [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVectorWithTolerance_x1y0z0_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 0, 0);
+            var result = s1.IsUnitVector(0.0002);
+
+            result.Should().Be(true, "vector (1,0,0) is a unit vector");
+        }
+
+        [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVectorWithTolerance_WhereTheZComponentIsNearlyOneByLessThanTheTolerance_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, 0.9999);
+            var result = s1.IsUnitVector(0.0002);
+
+            // Quick test to ensure that the double minus operation does not introduce an unexpected margin of error that is higher than our margin of error
+            (1d - 0.9999d).Should().BeLessThan(0.0002d, "the double calculations of 1 minus 0.9999 should be less than 0.0002 or our test is incorrect");
+
+            // Assert our acual test
+            result.Should().Be(true, "the tolerance should have been greater than the difference between the z components and 1");
+        }
+
+        [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVectorWithTolerance_WhereTheZComponentIsNearlyOneByMoreThanTheTolerance_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, 0.9999);
+
+            var result = s1.IsUnitVector(0.00009);
+
+            // Quick test to ensure that the double minus operation does not introduce an unexpected margin of error
+            (1d - 0.9999d).Should().BeGreaterThan(0.00009d, "the double calculations of 3 minus 2.9999 should be greater than 0.00009 or our test is incorrect");
+
+            result.Should().Be(false, "the tolerance should be less than the difference between the z component and 1");
+        }
+
+        #endregion
+
+        #region Is Perpendicular Tests
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_x1y0z0_x0y1z0_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 0, 0);
+            Vector3 s2 = new Vector3(0, 1, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (1,0,0) is perpendicular to vector (0,1,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_x1y0z0_x1y1z1_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 0, 0);
+            Vector3 s2 = new Vector3(1, 1, 1);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(false, "vector (1,0,0) is not perpendicular to vector (1,1,1)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereFirstVectorXIsNegative1AndSecondVectorYIsOne_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(-1, 0, 0);
+            Vector3 s2 = new Vector3(0, 1, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (-1,0,0) is perpendicular to vector (0,1,0)");
         }
 
         #endregion
