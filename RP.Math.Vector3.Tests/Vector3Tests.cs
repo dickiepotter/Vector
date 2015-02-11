@@ -158,8 +158,8 @@
 
         #region Magnitude tests
 
-        [TestMethod]
-        public void MagnitudeUsingPositiveAndNegativeWholeNumberParametersTest()
+        [TestMethod, TestCategory("Magnitude")]
+        public void Magnitude_UsingPositiveAndNegativeWholeNumberParameters_Test()
         {
             var vector = new Vector3(3, 1, -1);
             var magnitude = vector.Magnitude;
@@ -167,8 +167,8 @@
             magnitude.Should().Be(System.Math.Sqrt(11));
         }
 
-        [TestMethod]
-        public void MagnitudeUsingPositiveWholeNumberParametersTest()
+        [TestMethod, TestCategory("Magnitude")]
+        public void Magnitude_UsingPositiveWholeNumberParameters_Test()
         {
             var vector = new Vector3(2, 3, 4);
             var magnitude = vector.Magnitude;
@@ -179,8 +179,8 @@
         /// <summary>
         /// Test scaling a vector with X component only
         /// </summary>
-        [TestMethod]
-        public void ScaleXTest()
+        [TestMethod, TestCategory("Magnitude")]
+        public void Scale_X_Test()
         {
             var vector = new Vector3(1, 0, 0);
             var result = vector.Scale(10);
@@ -193,8 +193,8 @@
         /// <summary>
         /// Test scaling a vector with Y component only
         /// </summary>
-        [TestMethod]
-        public void ScaleYTest()
+        [TestMethod, TestCategory("Magnitude")]
+        public void Scale_Y_Test()
         {
             var vector = new Vector3(0, 1, 0);
             var result = vector.Scale(10);
@@ -207,8 +207,8 @@
         /// <summary>
         /// Test scaling a vector with X and Z components (checking the result to six decimal places)
         /// </summary>
-        [TestMethod]
-        public void ScaleXZTest()
+        [TestMethod, TestCategory("Magnitude")]
+        public void Scale_XZ_Test()
         {
             var vector = new Vector3(1, 0, 1);
             var result = vector.Scale(10);
@@ -570,8 +570,8 @@
 
         #region Comparison Tests
 
-        [TestMethod]
-        public void CompareToTest()
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereWeAreTestingGreaterObjectEquivenenceAndLess_Test()
         {
             // Magnitude 8555.6321215910166084530447384188
             Vector3 s0 = new Vector3(1796, 0, 8365);
@@ -588,6 +588,135 @@
 
             result = s1.CompareTo(box);
             result.Should().Be(-1, "magnitude of s1 is less than magnitude of s0 even when s0 has been cast to an object");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereZComponentsArePositiveInfinity_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(0, 0, double.PositiveInfinity);
+
+            var zComponentResult = s1.Z.CompareTo(s2.Z);
+            var result = s1.CompareTo(s2);
+
+            // Test our assumption about the .Net framework expectations
+            double.PositiveInfinity.CompareTo(double.PositiveInfinity).Should().Be(0, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wront then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(0, "z components of positive infinty and positive infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(0, "positive infinty and positive infinty should be equal, as should the other components");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereZComponentsAreNegativeInfinity_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.NegativeInfinity);
+            Vector3 s2 = new Vector3(0, 0, double.NegativeInfinity);
+
+            var zComponentResult = s1.Z.CompareTo(s2.Z);
+            var result = s1.CompareTo(s2);
+
+            // Test our assumption about the .Net framework expectations
+            double.NegativeInfinity.CompareTo(double.NegativeInfinity).Should().Be(0, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the.Net framework
+            zComponentResult.Should().Be(0, "z components of negative infinty and negative infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(0, "negative infinty and negative infinty should be equal, as should the other components");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereZComponentsArePositiveInfinityAndNegativeInfinity_ShouldNotBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(0, 0, double.NegativeInfinity);
+
+            var s1s2Result = s1.CompareTo(s2);
+            var s2s1Result = s2.CompareTo(s1);
+
+            s1s2Result.Should().Be(0, "when comparing magnitude sign should not be important so positive infinty should be equal to negative infinty");
+            s2s1Result.Should().Be(0, "when comparing magnitude sign should not be important so negative infinty should be equal to positive infinty");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareToWithTolerance_WhereTheZComponentsAreDifferentByLessThanTheTolerance_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, 3);
+            Vector3 s2 = new Vector3(0, 0, 2.9999);
+
+            var result = s1.CompareTo(s2, 0.0002);
+
+            // Quick test to ensure that the double minus operation does not introduce an unexpected margin of error that is higher than our margin of error
+            (3d - (2.9999d)).Should().BeLessThan(0.0002d, "the double calculations of 3 minus 2.9999 should be less than 0.0002 or our test is incorrect");
+
+            // Assert our acual test
+            result.Should().Be(0, "the tolerance should have been greter than the difference between the z components for s1 and s2");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareToWithTolerance_WhereZComponentDifferenceIsGreaterThanTheTolerance_ShouldBe1_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, 3);
+            Vector3 s2 = new Vector3(0, 0, 2.9999);
+
+            var result = s1.CompareTo(s2, 0.00009);
+
+            // Quick test to ensure that the double minus operation does not introduce an unexpected margin of error
+            (3d - 2.9999d).Should().BeGreaterThan(0.00009d, "the double calculations of 3 minus 2.9999 should be greater than 0.00009 or our test is incorrect");
+
+            result.Should().Be(1, "the tolerance should be less than the difference between the z components for s1 and s2, so 3 should be greater than 2.9999");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareToWithTolerance_WhereZComponentDifferenceIsGreaterThanTheTolerance_ShouldBeNegative1_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, 2.9999);
+            Vector3 s2 = new Vector3(0, 0, 3);
+            
+            var result = s1.CompareTo(s2, 0.00009);
+
+            // Quick test to ensure that the double minus operation does not introduce an unexpected margin of error
+            (3d - 2.9999d).Should().BeGreaterThan(0.00009d, "the double calculations of 3 minus 2.9999 should be greater than 0.00009 or our test is incorrect");
+
+            result.Should().Be(-1, "the tolerance should be less than the difference between the z components for s1 and s2, so 2.9999 should be less than 3");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareToWithTolerance_WhereZComponentsArePositiveInfinity_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(0, 0, double.PositiveInfinity);
+
+            var result = s1.CompareTo(s2, 0.00001);
+
+            result.Should().Be(0, "positive infinty and positive infinty should be equal regardless of tolerance, as should the other components");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareToWithTolerance_WhereZComponentsAreNegativeInfinity_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.NegativeInfinity);
+            Vector3 s2 = new Vector3(0, 0, double.NegativeInfinity);
+
+            var result = s1.CompareTo(s2, 0.00001);
+
+            result.Should().Be(0, "negative infinty and negative infinty should be equal regardless of tolerance, as should the other components");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareToWithTolerance_WhereZComponentsArePositiveInfinityAndNegativeInfinity_ShouldNotBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(0, 0, double.NegativeInfinity);
+
+            var s1s2Result = s1.CompareTo(s2, 0.00001);
+            var s2s1Result = s2.CompareTo(s1, 0.00001);
+
+            s1s2Result.Should().Be(0, "when comparing magnitude sign should not be important so positive infinty should be equal to negative infinty");
+            s2s1Result.Should().Be(0, "when comparing magnitude sign should not be important so negative infinty should be equal to positive infinty");
         }
 
         #endregion
