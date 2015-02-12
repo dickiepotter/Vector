@@ -16,7 +16,7 @@ namespace RP.Math
         {
             double diff = Math.Abs(a - b);
 
-            if (a == b)
+            if (a.Equals(b))
             { 
                 // shortcut, handles infinities
                 return true;
@@ -39,7 +39,7 @@ namespace RP.Math
             double absA = Math.Abs(a);
             double absB = Math.Abs(b);
 
-            if ( AlmostEquals(a, b, maxAbsoluteError) )
+            if (AlmostEquals(a, b, maxAbsoluteError) )
             {
                 return true;
             }
@@ -67,7 +67,7 @@ namespace RP.Math
         /// <acknowalgement>http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm</acknowalgement>
         public static bool AlmostEquals(this double a, double b, long maxUlps)
         {
-            if (a == b)
+            if (a.Equals(b))
             {
                 // shortcut, handles infinities
                 return true;

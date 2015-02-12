@@ -600,7 +600,7 @@
             var result = s1.CompareTo(s2);
 
             // Test our assumption about the .Net framework expectations
-            double.PositiveInfinity.CompareTo(double.PositiveInfinity).Should().Be(0, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wront then the logic of this test is also wrong)");
+            double.PositiveInfinity.CompareTo(double.PositiveInfinity).Should().Be(0, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wrong then the logic of this test is also wrong)");
 
             // Test that the component operation matches our assumption about the .Net framework
             zComponentResult.Should().Be(0, "z components of positive infinty and positive infinty should be equal");
@@ -619,7 +619,7 @@
             var result = s1.CompareTo(s2);
 
             // Test our assumption about the .Net framework expectations
-            double.NegativeInfinity.CompareTo(double.NegativeInfinity).Should().Be(0, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+            double.NegativeInfinity.CompareTo(double.NegativeInfinity).Should().Be(0, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wrong then the logic of this test is also wrong)");
 
             // Test that the component operation matches our assumption about the.Net framework
             zComponentResult.Should().Be(0, "z components of negative infinty and negative infinty should be equal");
@@ -724,6 +724,107 @@
         #region Equality
 
         [TestMethod, TestCategory("Equals")]
+        public void EqualityOpererator_WhereTheComponentsAreEqual_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, 3);
+
+            var result = s1 == s2;
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityOpererator_WhereXYZOrderIsImportantAndTheComponentAreNotInTheCorrectOrder_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(3, 2, 1);
+
+            var result = s1 == s2;
+
+            result.Should().Be(false);
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityOpererator_WhereZComponentsArePositiveInfinity_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.PositiveInfinity);
+
+            var zComponentResult = s1.Z == s2.Z;
+            var result = s1 == s2;
+
+            // Test our assumption about the .Net framework expectations
+            (double.PositiveInfinity == double.PositiveInfinity).Should().Be(true, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "z components of positive infinty and positive infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "positive infinty and positive infinty should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityOpererator_WhereZComponentsAreNegativeInfinity_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.NegativeInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.NegativeInfinity);
+
+            var zComponentResult = s1.Z == s2.Z;
+            var result = s1 == s2;
+
+            // Test our assumption about the .Net framework expectations
+            (double.NegativeInfinity == double.NegativeInfinity).Should().Be(true, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the.Net framework
+            zComponentResult.Should().Be(true, "z components of negative infinty and negative infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "negative infinty and negative infinty should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityOpererator_WhereOneZComponentIsNaN_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var zComponentResult = s1.Z == s2.Z;
+            var result = s1 == s2;
+
+            // Test our assumption about the .Net framework expectations
+            (3 == double.NaN).Should().Be(false, "the .Net framework should find double 3 not equal to double NaN (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(false, "3 and NaN should not be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(false, "the two vectors should not be equal given one of the Z components is NaN");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityOpererator_WhereZComponentsAreNaN_ShouldBeFalse_Test()
+        {
+            // Interestingly double.NaN == double.NaN is false while double.NaN.Equals(double.NaN) is true.
+            // Lets be consistent with the .Net framework even if it isn't consistent with itself
+
+            Vector3 s1 = new Vector3(1, 2, double.NaN);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var zComponentResult = s1.Z == s2.Z;
+            var result = s1 == s2;
+
+            // Test our assumption about the .Net framework expectations
+            (double.NaN == double.NaN).Should().Be(false, "the .Net framework should find double NaN not equal to double NaN using the == operator (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(false, "NaN and NaN should not be equal when using the == operator");
+
+            // Test that our result matches the assumption
+            result.Should().Be(false, "the two vectors should be not equal give the z components are NaN");
+        }
+
+        [TestMethod, TestCategory("Equals")]
         public void Equality_WhereTheComponentsAreEqual_ShouldBeTrue_Test()
         {
             Vector3 s1 = new Vector3(1, 2, 3);
@@ -755,7 +856,7 @@
             var result = s1.Equals(s2);
 
             // Test our assumption about the .Net framework expectations
-            double.PositiveInfinity.Equals(double.PositiveInfinity).Should().Be(true, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wront then the logic of this test is also wrong)");
+            double.PositiveInfinity.Equals(double.PositiveInfinity).Should().Be(true, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wrong then the logic of this test is also wrong)");
 
             // Test that the component operation matches our assumption about the .Net framework
             zComponentResult.Should().Be(true, "z components of positive infinty and positive infinty should be equal");
@@ -774,13 +875,54 @@
             var result = s1.Equals(s2);
 
             // Test our assumption about the .Net framework expectations
-            double.NegativeInfinity.Equals(double.NegativeInfinity).Should().Be(true, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+            double.NegativeInfinity.Equals(double.NegativeInfinity).Should().Be(true, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wrong then the logic of this test is also wrong)");
 
             // Test that the component operation matches our assumption about the.Net framework
             zComponentResult.Should().Be(true, "z components of negative infinty and negative infinty should be equal");
 
             // Test that our result matches the assumption
             result.Should().Be(true, "negative infinty and negative infinty should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equality_WhereOneZComponentIsNaN_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2);
+
+            // Test our assumption about the .Net framework expectations
+            3.Equals(double.NaN).Should().Be(false, "the .Net framework should find double 3 not equal to double NaN (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(false, "3 and NaN should not be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(false, "the two vectors should not be equal given one of the Z components is NaN");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equality_WhereZComponentsAreNaN_ShouldBeTrue_Test()
+        {
+            // Interestingly double.NaN == double.NaN is false while double.NaN.Equals(double.NaN) is true.
+            // Lets be consistent with the .Net framework even if it isn't consistent with itself
+
+            Vector3 s1 = new Vector3(1, 2, double.NaN);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2);
+
+            // Test our assumption about the .Net framework expectations
+            double.NaN.Equals(double.NaN).Should().Be(true, "the .Net framework should find double NaN equal to double NaN using the Equals method (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "NaN and NaN should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "the two vectors should be equal");
         }
 
         [TestMethod, TestCategory("Equals")]
@@ -822,7 +964,7 @@
             var result = s1.Equals(s2, 0.00001);
 
             // Test our assumption about the .Net framework expectations
-            double.PositiveInfinity.Equals(double.PositiveInfinity).Should().Be(true, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wront then the logic of this test is also wrong)");
+            double.PositiveInfinity.Equals(double.PositiveInfinity).Should().Be(true, "the .Net framework should find double positive infinty equal to positive infinity (if this assumption is wrong then the logic of this test is also wrong)");
 
             // Test that the component operation matches our assumption about the .Net framework
             zComponentResult.Should().Be(true, "positive infinty and positive infinty should be equal regardless of tolerance");
@@ -841,7 +983,7 @@
             var result = s1.Equals(s2, 0.00001);
 
             // Test our assumption about the .Net framework expectations
-            double.NegativeInfinity.Equals(double.NegativeInfinity).Should().Be(true, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+            double.NegativeInfinity.Equals(double.NegativeInfinity).Should().Be(true, "the .Net framework should find double negative infinty equal to negative infinity (if this assumption is wrong then the logic of this test is also wrong)");
 
             // Test that the component operation matches our assumption about the .Net framework
             zComponentResult.Should().Be(true, "negative infinty and negative infinty should be equal regardless of tolerance");
@@ -860,13 +1002,54 @@
             var result = s1.Equals(s2, 0.00001);
 
             // Test our assumption about the .Net framework expectations
-            double.PositiveInfinity.Equals(double.NegativeInfinity).Should().Be(false, "the .Net framework should find double positive infinty not equal to negative infinity (if this assumption is wront then the logic of this test is also wrong)");
+            double.PositiveInfinity.Equals(double.NegativeInfinity).Should().Be(false, "the .Net framework should find double positive infinty not equal to negative infinity (if this assumption is wrong then the logic of this test is also wrong)");
 
             // Test that the component operation matches our assumption about the .Net framework
             zComponentResult.Should().Be(false, "positive infinty and negative infinty should not be equal");
 
             // Test that our result matches the assumption
             result.Should().Be(false, "the two vectors should not be equal given positive infinty and negative infinty should not be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityWithTolerance_WhereOneZComponentIsNaN_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2, 0.00001);
+
+            // Test our assumption about the .Net framework expectations
+            3.Equals(double.NaN).Should().Be(false, "the .Net framework should find double 3 not equal to double NaN (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(false, "3 and NaN should not be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(false, "the two vectors should not be equal given one of the Z components is NaN");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void EqualityWithTolerance_WhereZComponentsAreNaN_ShouldBeTrue_Test()
+        {
+            // Interestingly double.NaN == double.NaN is false while double.NaN.Equals(double.NaN) is true.
+            // Lets be consistent with the .Net framework even if it isn't consistent with itself
+
+            Vector3 s1 = new Vector3(1, 2, double.NaN);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var zComponentResult = s1.Z.Equals(s2.Z);
+            var result = s1.Equals(s2, 0.00001);
+
+            // Test our assumption about the .Net framework expectations
+            double.NaN.Equals(double.NaN).Should().Be(true, "the .Net framework should find double NaN equal to double NaN using the Equals method (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "NaN and NaN should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "the two vectors should be equal");
         }
 
         #endregion
