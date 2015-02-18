@@ -9,6 +9,8 @@
     [TestClass]
     public class Vector3Tests
     {
+        private const double ArbitaryTestDouble = 109.005;
+
         private static readonly double Deg90AsRad = System.Math.PI / 2;
 
         #region Constructor tests
@@ -1132,7 +1134,7 @@
         #region Is Perpendicular Tests
 
         [TestMethod, TestCategory("IsPerpendicular")]
-        public void IsPerpendicular_x1y0z0_x0y1z0_ShouldBeTrue_Test()
+        public void IsPerpendicular_WhereUnitVectorsPositiveXY_ShouldBeTrue_Test()
         {
             Vector3 s1 = new Vector3(1, 0, 0);
             Vector3 s2 = new Vector3(0, 1, 0);
@@ -1142,23 +1144,200 @@
         }
 
         [TestMethod, TestCategory("IsPerpendicular")]
-        public void IsPerpendicular_x1y0z0_x1y1z1_ShouldBeFalse_Test()
+        public void IsPerpendicular_WhereUnitVectorsPositiveYX_ShouldBeTrue_Test()
         {
-            Vector3 s1 = new Vector3(1, 0, 0);
-            Vector3 s2 = new Vector3(1, 1, 1);
+            Vector3 s1 = new Vector3(0, 1, 0);
+            Vector3 s2 = new Vector3(1, 0, 0);
             var result = s1.IsPerpendicular(s2);
 
-            result.Should().Be(false, "vector (1,0,0) is not perpendicular to vector (1,1,1)");
+            result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (1,0,0)");
         }
 
         [TestMethod, TestCategory("IsPerpendicular")]
-        public void IsPerpendicular_WhereFirstVectorXIsNegative1AndSecondVectorYIsOne_ShouldBeTrue_Test()
+        public void IsPerpendicular_WhereUnitVectorsPositiveXNegativeY_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(1, 0, 0);
+            Vector3 s2 = new Vector3(0, -1, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (1,0,0) is perpendicular to vector (0,-1,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereUnitVectorsNegativeYPositiveX_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, -1, 0);
+            Vector3 s2 = new Vector3(1, 0, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (0,-1,0) is perpendicular to vector (1,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereUnitVectorsNegativeXY_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(-1, 0, 0);
+            Vector3 s2 = new Vector3(0, -1, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (-1,0,0) is perpendicular to vector (0,-1,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereUnitVectorsNegativeYX_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, -1, 0);
+            Vector3 s2 = new Vector3(-1, 0, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (0,-1,0) is perpendicular to vector (-1,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereUnitVectorsNegativeXPositiveY_ShouldBeTrue_Test()
         {
             Vector3 s1 = new Vector3(-1, 0, 0);
             Vector3 s2 = new Vector3(0, 1, 0);
             var result = s1.IsPerpendicular(s2);
 
             result.Should().Be(true, "vector (-1,0,0) is perpendicular to vector (0,1,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereUnitVectorsPositiveYNegativeX_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, 1, 0);
+            Vector3 s2 = new Vector3(-1, 0, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (-1,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WherePositiveXY_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, ArbitaryTestDouble, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (n,0,0) is perpendicular to vector (0,n,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WherePositiveYX_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(ArbitaryTestDouble, 0, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (0,n,0) is perpendicular to vector (n,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WherePositiveXNegativeY_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, -ArbitaryTestDouble, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (n,0,0) is perpendicular to vector (0,-n,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereUNegativeYPositiveX_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, -ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(ArbitaryTestDouble, 0, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (0,-n,0) is perpendicular to vector (n,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereNegativeXY_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, -ArbitaryTestDouble, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (-n,0,0) is perpendicular to vector (0,-n,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereNegativeYX_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, -ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (0,-n,0) is perpendicular to vector (-n,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereNegativeXPositiveY_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, ArbitaryTestDouble, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (-n,0,0) is perpendicular to vector (0,n,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WherePositiveYNegativeX_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(true, "vector (0,n,0) is perpendicular to vector (-n,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WherePositiveXYAnd45deg_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(1, 0, 0);
+            Vector3 s2 = new Vector3(1, 1, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(false, "vector (1,0,0) is not perpendicular to vector (1,1,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WherePositiveXAndNegativeXYAnd45deg_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(0, 1, 0);
+            Vector3 s2 = new Vector3(-1, -1, 0);
+            var result = s1.IsPerpendicular(s2);
+
+            result.Should().Be(false, "vector (1,0,0) is not perpendicular to vector (-1,-1,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicularWithTolerance_WhereUnitVectorsPositiveXYAndThereIsNoError_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, 1, 0);
+            Vector3 s2 = new Vector3(1, 0, 0); // with an error in Y that should produce a slightly off 90deg angle (as radians)
+
+            var result = s1.IsPerpendicular(s2, 0.0002); // remember the tolerance should be for the angle in Rad compared to 90deg (as a rad)
+
+            result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (1,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicularWithTolerance_WhereUnitVectorsPositiveXYAndThereIsAnError_ShouldBeTrue_Test()
+        {
+            Vector3 s1 = new Vector3(0, 1, 0);
+            Vector3 s2 = new Vector3(1, 0.001, 0); // with an error in Y that should produce a slightly off 90deg angle (as radians)
+
+            var result = s1.IsPerpendicular(s2, 0.001); // remember the tolerance should be for the angle in Rad compared to 90deg (as a rad)
+
+            // Check the tolerance on the angle
+            var angle = s1.Angle(s2);
+            angle.AlmostEquals(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
+
+            // Check the actual result
+            result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (1,0.001,0)");
         }
 
         #endregion
