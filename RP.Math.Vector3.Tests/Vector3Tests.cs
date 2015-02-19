@@ -17,8 +17,8 @@
 
         #region Constructor tests
 
-        [TestMethod]
-        public void ConstructionWithXYZParametersTest()
+        [TestMethod, TestCategory("Construction")]
+        public void Construction_WithXYZParameters_ShouldConstructCorrectly_Test()
         {
             var vector = new Vector3(100, -100, 0.01);
             vector.X.Should().Be(100d);
@@ -26,8 +26,8 @@
             vector.Z.Should().Be(0.01d);
         }
 
-        [TestMethod]
-        public void ConstructionWithAVector3ParameterTest()
+        [TestMethod, TestCategory("Construction")]
+        public void Construction_WithAVector3Parameter_ShouldConstructCorrectly_Test()
         {
             var vector = new Vector3(new Vector3(100, -100, 0));
 
@@ -36,8 +36,8 @@
             vector.Z.Should().Be(0);
         }
 
-        [TestMethod]
-        public void ConstructorWithAnArrayOfXYZParameterTest()
+        [TestMethod, TestCategory("Construction")]
+        public void Constructor_WithAnArrayOfXYZParameter_ShouldConstructCorrectly_Test()
         {
             var vector = new Vector3(new[] { 100, -100, 0.01 });
 
@@ -46,8 +46,8 @@
             vector.Z.Should().Be(0.01);
         }
 
-        [TestMethod]
-        public void ConstructorWithNoParametersTest()
+        [TestMethod, TestCategory("Construction")]
+        public void Constructor_WithNoParameters_ShouldConstructCorrectly_Test()
         {
             var vector = new Vector3();
 
@@ -211,7 +211,7 @@
         }
 
         [TestMethod, TestCategory("Magnitude")]
-        public void Magnitude_WithPositiveAndNegativeWholeNumberParameters_Test()
+        public void Magnitude_WithPositiveAndNegativeWholeNumberParameters_ShouldResultInTheCorrectMagnitude_Test()
         {
             var vector = new Vector3(3, 1, -1);
             var magnitude = vector.Magnitude;
@@ -220,7 +220,7 @@
         }
 
         [TestMethod, TestCategory("Magnitude")]
-        public void Magnitude_WithPositiveWholeNumberParameters_Test()
+        public void Magnitude_WithPositiveWholeNumberParameters_ShouldResultInTheCorrectMagnitude_Test()
         {
             var vector = new Vector3(2, 3, 4);
             var magnitude = vector.Magnitude;
@@ -232,7 +232,7 @@
         /// Test scaling a vector with X component only
         /// </summary>
         [TestMethod, TestCategory("Magnitude")]
-        public void Scale_X_Test()
+        public void Scale_WithXAsOne_ShouldScaleCorrectly_Test()
         {
             var vector = new Vector3(1, 0, 0);
             var result = vector.Scale(10);
@@ -246,7 +246,7 @@
         /// Test scaling a vector with Y component only
         /// </summary>
         [TestMethod, TestCategory("Magnitude")]
-        public void Scale_Y_Test()
+        public void Scale_WithYAsOne_ShouldScaleCorrectly_Test()
         {
             var vector = new Vector3(0, 1, 0);
             var result = vector.Scale(10);
@@ -260,7 +260,7 @@
         /// Test scaling a vector with X and Z components (checking the result to six decimal places)
         /// </summary>
         [TestMethod, TestCategory("Magnitude")]
-        public void Scale_XZ_Test()
+        public void Scale_WithXZAsOne_ShouldScaleCorrectly_Test()
         {
             var vector = new Vector3(1, 0, 1);
             var result = vector.Scale(10);
@@ -276,8 +276,8 @@
 
         #region Angle Tests
 
-        [TestMethod]
-        public void AngelOfTwoVectorsUsingWholeNumbersResultingIn90DegTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angel_WithTwoVectorsUsingWholeNumbers_ShouldResultIn90Deg_Test()
         {
             var a = new Vector3(1, 0, 0);
             var b = new Vector3(0, 1, 0);
@@ -286,8 +286,8 @@
             angle.Should().Be(Deg90AsRad);
         }
 
-        [TestMethod]
-        public void AngelOfTwoPerpendicularVectorsUsingWholeNumbers()
+        [TestMethod, TestCategory("Angle")]
+        public void Angel_WithTwoPerpendicularVectorsUsingWholeNumbers_ShouldBePIRad_Test()
         {
             var a = new Vector3(1, 0, 0);
             var b = new Vector3(-1, 0, 0);
@@ -296,8 +296,8 @@
             angle.Should().Be(System.Math.PI);
         }
 
-        [TestMethod]
-        public void AngelOfTwoVectorsUsingWholeNumbersResultingIn180DegTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angel_WithTwoVectorsUsingWholeNumbers_ShouldResultin180Deg_Test()
         {
             var a = new Vector3(1, 0, 0);
             var b = new Vector3(-1, 0, 0);
@@ -306,8 +306,8 @@
             angle.Should().Be(System.Math.PI);
         }
 
-        [TestMethod]
-        public void AngleOfIdenticalVectorsUsingWholeNumbersTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WithIdenticalVectorsUsingWholeNumbers_ShouldBe0_Test()
         {
             var a = new Vector3(1, 0, 0);
             var b = new Vector3(1, 0, 0);
@@ -316,8 +316,8 @@
             angle.Should().Be(0);
         }
 
-        [TestMethod]
-        public void AngleOfIdenticalVectorsUsingLongFloatingPointNumbersTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WithIdenticalVectorsUsingLongFloatingPointNumbers_ShouldBe0_Test()
         {
             var a = new Vector3(0.795271508195995f, -0.0612034045226753f, -0.603156175071185f);
             var b = new Vector3(0.795271508195995f, -0.0612034045226753f, -0.603156175071185f);
@@ -331,8 +331,8 @@
         /// When using a floating point number with positive and negative values as data type float
         /// </summary>
         /// <acknowlagement>Based on an example issue and solution from Dennis E. Cox (In comments on CodeProject, http://www.codeproject.com/Articles/17425/A-Vector-Type-for-C )</acknowlagement>
-        [TestMethod]
-        public void AngleOfVectorsUsingLongFloatingPointNumbersThatShouldNotResultInNaNTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WithVectorsUsingLongFloatingPointNumbers_ShouldNotResultInNaN_Test()
         {
             var a = new Vector3(0.795271508195995f, -0.0612034045226753f, -0.603156175071185f);
             var b = new Vector3(0.795271508449802f, -0.0612033993276936f, -0.60315617526368f);
@@ -343,8 +343,8 @@
             angle.Should().BeGreaterOrEqualTo(0);
         }
 
-        [TestMethod]
-        public void AngleOfIdenticalVectorsUsingDoubleFloatingPointNumbersTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WithIdenticalVectorsUsingDoubleFloatingPointNumbers_ShouldBe0_Test()
         {
             var a = new Vector3(0.795271508195995d, -0.0612034045226753d, -0.603156175071185d);
             var b = new Vector3(0.795271508195995d, -0.0612034045226753d, -0.603156175071185d);
@@ -358,8 +358,8 @@
         /// When using a floating point number with positive and negative values as data type double
         /// </summary>
         /// <acknowlagement>Based on an example issue and solution from Dennis E. Cox (In comments on CodeProject, http://www.codeproject.com/Articles/17425/A-Vector-Type-for-C )</acknowlagement>
-        [TestMethod]
-        public void AngleOfVectorsUsingDoubleFloatingPointNumbersThatShouldNotResultInNaNTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WithVectorsUsingDoubleFloatingPointNumbers_ShouldNotResultInNaN_Test()
         {
             var a = new Vector3(0.795271508195995d, -0.0612034045226753d, -0.603156175071185d);
             var b = new Vector3(0.795271508449802d, -0.0612033993276936d, -0.60315617526368d);
@@ -370,8 +370,8 @@
             angle.Should().BeGreaterOrEqualTo(0);
         }
 
-        [TestMethod]
-        public void AngleOfIdenticalVectorsUsingMaxAndMinFloatingPointNumbersTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WithOfIdenticalVectorsUsingMaxAndMinFloatingPointNumbers_ShouldBe0_Test()
         {
             var a = new Vector3(float.MaxValue, float.MinValue, 0);
             var b = new Vector3(float.MaxValue, float.MinValue, 0);
@@ -380,8 +380,8 @@
             angle.Should().Be(0);
         }
 
-        [TestMethod]
-        public void AngleUsingDifferentWholeNumbersResultingInAFractionalNumberTest()
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WithDifferentWholeNumbers_ShouldResultInAFractionalNumber_Test()
         {
             Vector3 s0 = new Vector3(7719, 0, 38);
             Vector3 s1 = new Vector3(38, 0, 7719);
@@ -707,6 +707,58 @@
         }
 
         [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereZComponentsAreNaN_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.NaN);
+            Vector3 s2 = new Vector3(0, 0, double.NaN);
+
+            var zComponentResult = s1.Z.CompareTo(s2.Z);
+            var result = s1.CompareTo(s2);
+
+            // Test our assumption about the .Net framework expectations
+            double.NaN.CompareTo(double.NaN).Should().Be(0, "the .Net framework should find double NaN equal to NaN (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(0, "z components of NaN and NaN should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(0, "NaN and NaN should be equal, as should the other components");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereOneZIsNaNAndTheOtherXIsNaN_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 0, double.NaN);
+            Vector3 s2 = new Vector3(double.NaN, 0, 0);
+
+            var result = s1.CompareTo(s2);
+
+            result.Should().Be(0, "both magnitudes should be NaN so comparison should find the vectors equivelent");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereOneZIsNaNAndTheOtherXIsNaNAndTheYComponentsDoNotMatch_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(0, 10, double.NaN);
+            Vector3 s2 = new Vector3(double.NaN, -3, 0);
+
+            var result = s1.CompareTo(s2);
+
+            result.Should().Be(0, "both magnitudes should be NaN when any component is NaN so comparison should find the vectors equivelent");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
+        public void CompareTo_WhereOneXYIsNaNAndTheOtherXIsNaN_ShouldBe0_Test()
+        {
+            Vector3 s1 = new Vector3(double.NaN, double.NaN, 0);
+            Vector3 s2 = new Vector3(double.NaN, 0, 0);
+
+            var result = s1.CompareTo(s2);
+
+            result.Should().Be(0, "both magnitudes should be NaN so comparison should find the vectors equivelent");
+        }
+
+        [TestMethod, TestCategory("CompareTo")]
         public void CompareTo_WhereZComponentsAreNegativeInfinity_ShouldBe0_Test()
         {
             Vector3 s1 = new Vector3(0, 0, double.NegativeInfinity);
@@ -918,7 +970,7 @@
             zComponentResult.Should().Be(false, "NaN and NaN should not be equal when using the == operator");
 
             // Test that our result matches the assumption
-            result.Should().Be(false, "the two vectors should be not equal give the z components are NaN");
+            result.Should().Be(false, "the two vectors should be not equal given the z components are NaN");
         }
 
         [TestMethod, TestCategory("Equals")]
@@ -1147,6 +1199,99 @@
 
             // Test that our result matches the assumption
             result.Should().Be(true, "the two vectors should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void GetHashCode_WhereTheComponentsAreEqual_ShouldResultInEquivelentHashCodes_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, 3);
+
+            var result = s1.GetHashCode() == s2.GetHashCode();
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void GetHashCode_WhereXYZOrderIsImportantAndTheComponentAreNotInTheCorrectOrder_ShouldNotResultInEquivelentHashCodes_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(3, 2, 1);
+
+            var result = s1.GetHashCode() == s2.GetHashCode();
+
+            result.Should().Be(false);
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void GetHashCode_WhereZComponentsArePositiveInfinity_ShouldResultInEquivelentHashCodes_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.PositiveInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.PositiveInfinity);
+
+            var zComponentResult = s1.Z.GetHashCode() == s2.Z.GetHashCode();
+            var result = s1.GetHashCode() == s2.GetHashCode();
+
+            // Test our assumption about the .Net framework expectations
+            (double.PositiveInfinity.GetHashCode() == double.PositiveInfinity.GetHashCode()).Should().Be(true, "the .Net framework should find double positive infinty's hash code equal to positive infinity's hash code (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "z component hash codes of positive infinty and positive infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "positive infinty and positive infinty hash codes should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void GetHashCode_WhereZComponentsAreNegativeInfinity_ShouldResultInEquivelentHashCodes_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, double.NegativeInfinity);
+            Vector3 s2 = new Vector3(1, 2, double.NegativeInfinity);
+
+            var zComponentResult = s1.Z.GetHashCode() == s2.Z.GetHashCode();
+            var result = s1.GetHashCode() == s2.GetHashCode();
+
+            // Test our assumption about the .Net framework expectations
+            (double.NegativeInfinity.GetHashCode() == double.NegativeInfinity.GetHashCode()).Should().Be(true, "the .Net framework should find double negative infinty's has code equal to negative infinity's hash code (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the.Net framework
+            zComponentResult.Should().Be(true, "z component hash codes of negative infinty and negative infinty should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "negative infinty and negative infinty hash codes should be equal");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void GetHashCode_WhereOneZComponentIsNaN_ShouldNotResultInEquivelentHashCodes_Test()
+        {
+            Vector3 s1 = new Vector3(1, 2, 3);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var result = s1.GetHashCode() == s2.GetHashCode();
+
+            result.Should().Be(false, "the two vectors' hash codes should not be equal given one of the Z components is NaN");
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void GetHashCode_WhereZComponentsAreNaN_ShouldResultInEquivelentHashCodes_Test()
+        {
+            // Interestingly double.NaN == double.NaN is false while double.NaN.Equals(double.NaN) is true.
+            // I am testing the assumption that GetHashCode follows the logic of .Equals()
+
+            Vector3 s1 = new Vector3(1, 2, double.NaN);
+            Vector3 s2 = new Vector3(1, 2, double.NaN);
+
+            var zComponentResult = s1.Z.GetHashCode() == s2.Z.GetHashCode();
+            var result = s1.GetHashCode() == s2.GetHashCode();
+
+            // Test our assumption about the .Net framework expectations
+            (double.NaN.GetHashCode() == double.NaN.GetHashCode()).Should().Be(true, "the .Net framework should find the hash codes of double NaN and double NaN equal (if this assumption is wrong then the logic of this test is also wrong)");
+
+            // Test that the component operation matches our assumption about the .Net framework
+            zComponentResult.Should().Be(true, "the hash codes of NaN and NaN should be equal");
+
+            // Test that our result matches the assumption
+            result.Should().Be(true, "the two vectors' hashcodes should be equal given the z components are NaN");
         }
 
         #endregion
