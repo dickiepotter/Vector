@@ -407,12 +407,34 @@
         }
 
         [TestMethod, TestCategory("Normalize")]
-        public void Normalize_WithUnitVectorXIsPositiveInfinity_ShouldResultInXBeingOne_Test()
+        public void Normalize_WithUnitVectorXIsNegativeOne_ShouldNotChangeDuringNormalization_Test()
+        {
+            var vector = new Vector3(-1, 0, 0);
+            var result = vector.Normalize();
+
+            result.X.Should().Be(-1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsPositiveInfinity_ShouldResultInXBeingNegativeOne_Test()
         {
             var vector = new Vector3(double.PositiveInfinity, 0, 0);
             var result = vector.Normalize();
 
-            result.X.Should().Be(1);
+            result.X.Should().Be(-1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsNegativeInfinity_ShouldResultInXBeingOne_Test()
+        {
+            var vector = new Vector3(double.NegativeInfinity, 0, 0);
+            var result = vector.Normalize();
+
+            result.X.Should().Be(-1);
             result.Y.Should().Be(0);
             result.Z.Should().Be(0);
         }
@@ -428,16 +450,29 @@
             result.Z.Should().Be(0);
         }
 
-        [TestMethod, TestCategory("Normalize")]
+        /// <summary>
+        /// Test that vectors containing a NaN component will throw an exception when being Normalized
+        /// </summary>
+        /// <ignored>This test is for an alternative decision on implementation, <see cref="Normalize_WithUnitVectorXIsNaN_ShouldReturnXYZOfNaN_Test"/></ignored>
+        [TestMethod, TestCategory("Normalize"), Ignore]
         public void Normalize_WithUnitVectorXIsNaN_ShouldThrowException_Test()
         {
             var vector = new Vector3(double.NaN, 0, 0);
 
             Action act = () => vector.Normalize();
 
-            // TODO - This actualy returns vector (NaN, NaN, NaN), which is better, an exception or NaN?
-
             act.ShouldThrow<InvalidOperationException>("you should not be able to normalize NaN values");
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsNaN_ShouldReturnXYZOfNaN_Test()
+        {
+            var vector = new Vector3(double.NaN, 0, 0);
+            var result = vector.Normalize();
+
+            result.X.Should().Be(double.NaN);
+            result.Y.Should().Be(double.NaN);
+            result.Z.Should().Be(double.NaN);
         }
 
         /// <summary>
