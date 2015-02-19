@@ -395,12 +395,57 @@
 
         #region Normalize
 
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsOne_ShouldNotChangeDuringNormalization_Test()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var result = vector.Normalize();
+
+            result.X.Should().Be(1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsPositiveInfinity_ShouldResultInXBeingOne_Test()
+        {
+            var vector = new Vector3(double.PositiveInfinity, 0, 0);
+            var result = vector.Normalize();
+
+            result.X.Should().Be(1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsPositiveNumber_ShouldResultInXBeingOne_Test()
+        {
+            var vector = new Vector3(10, 0, 0);
+            var result = vector.Normalize();
+
+            result.X.Should().Be(1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsNaN_ShouldThrowException_Test()
+        {
+            var vector = new Vector3(double.NaN, 0, 0);
+
+            Action act = () => vector.Normalize();
+
+            // TODO - This actualy returns vector (NaN, NaN, NaN), which is better, an exception or NaN?
+
+            act.ShouldThrow<InvalidOperationException>("you should not be able to normalize NaN values");
+        }
+
         /// <summary>
         /// Test the normalization of a vector
         /// </summary>
         /// <acknowlagement>Example from http://www.fundza.com/vectors/normalize/ </acknowlagement>
-        [TestMethod]
-        public void NormalizeTest()
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithPositiveWholeNumbers_ShouldBeCorrect_Test()
         {
             var vector = new Vector3(3, 1, 2);
             var result = vector.Normalize();
