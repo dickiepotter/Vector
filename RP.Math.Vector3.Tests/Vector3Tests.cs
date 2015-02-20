@@ -163,6 +163,33 @@
         #region Magnitude tests
 
         [TestMethod, TestCategory("Magnitude")]
+        public void Magnitude_WithPositiveZeroVector_ShouldBe0_Test()
+        {
+            var vector = new Vector3(0, 0, 0);
+            var magnitude = vector.Magnitude;
+
+            magnitude.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Magnitude")]
+        public void Magnitude_WithNegativeZeroVector_ShouldBe0_Test()
+        {
+            var vector = new Vector3(-0, -0, -0);
+            var magnitude = vector.Magnitude;
+
+            magnitude.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Magnitude")]
+        public void Magnitude_WithPositievAndNegativeZeroVector_ShouldBe0_Test()
+        {
+            var vector = new Vector3(-0, +0, -0);
+            var magnitude = vector.Magnitude;
+
+            magnitude.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Magnitude")]
         public void Magnitude_WithXNaN_ShouldBeNaN_Test()
         {
             var vector = new Vector3(double.NaN, 0, 0);
@@ -283,7 +310,237 @@
             var b = new Vector3(0, 1, 0);
             var angle = a.Angle(b);
 
-            angle.Should().Be(Deg90AsRad);
+            angle.Should().Be(Deg90AsRad, "vector (1,0,0) is perpendicular to vector (0,1,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfinitePositiveXY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(double.PositiveInfinity, 0, 0);
+            Vector3 s2 = new Vector3(0, double.PositiveInfinity, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (+inf,0,0) is perpendicular to vector (0,+inf,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsPositiveYX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, 1, 0);
+            Vector3 s2 = new Vector3(1, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,1,0) is perpendicular to vector (1,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfinitePositiveYX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, double.PositiveInfinity, 0);
+            Vector3 s2 = new Vector3(double.PositiveInfinity, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,+inf,0) is perpendicular to vector (+inf,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsPositiveXNegativeY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(1, 0, 0);
+            Vector3 s2 = new Vector3(0, -1, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (1,0,0) is perpendicular to vector (0,-1,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfinitePositiveXNegativeY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(double.PositiveInfinity, 0, 0);
+            Vector3 s2 = new Vector3(0, double.NegativeInfinity, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (+inf,0,0) is perpendicular to vector (0,-inf,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsNegativeYPositiveX_SShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, -1, 0);
+            Vector3 s2 = new Vector3(1, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,-1,0) is perpendicular to vector (1,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfiniteNegativeYPositiveX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, double.NegativeInfinity, 0);
+            Vector3 s2 = new Vector3(double.PositiveInfinity, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,-inf,0) is perpendicular to vector (+inf,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsNegativeXY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(-1, 0, 0);
+            Vector3 s2 = new Vector3(0, -1, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (-1,0,0) is perpendicular to vector (0,-1,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfiniteNegativeXY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(double.NegativeInfinity, 0, 0);
+            Vector3 s2 = new Vector3(0, double.NegativeInfinity, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (-inf,0,0) is perpendicular to vector (0,-inf,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsNegativeYX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, -1, 0);
+            Vector3 s2 = new Vector3(-1, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,-1,0) is perpendicular to vector (-1,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfiniteNegativeYX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, double.NegativeInfinity, 0);
+            Vector3 s2 = new Vector3(double.NegativeInfinity, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,-inf,0) is perpendicular to vector (-inf,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsNegativeXPositiveY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(-1, 0, 0);
+            Vector3 s2 = new Vector3(0, 1, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (-1,0,0) is perpendicular to vector (0,1,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfiniteNegativeXPositiveY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(double.NegativeInfinity, 0, 0);
+            Vector3 s2 = new Vector3(0, double.PositiveInfinity, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (-inf,0,0) is perpendicular to vector (0,+inf,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsPositiveYNegativeX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, 1, 0);
+            Vector3 s2 = new Vector3(-1, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,1,0) is perpendicular to vector (-1,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUnitVectorsInfinitePositiveYNegativeX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, double.PositiveInfinity, 0);
+            Vector3 s2 = new Vector3(double.NegativeInfinity, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,+inf,0) is perpendicular to vector (-inf,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WherePositiveXY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, ArbitaryTestDouble, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (n,0,0) is perpendicular to vector (0,n,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WherePositiveYX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(ArbitaryTestDouble, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,n,0) is perpendicular to vector (n,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WherePositiveXNegativeY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, -ArbitaryTestDouble, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (n,0,0) is perpendicular to vector (0,-n,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereUNegativeYPositiveX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, -ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(ArbitaryTestDouble, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,-n,0) is perpendicular to vector (n,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void IAngle_WhereNegativeXY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, -ArbitaryTestDouble, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (-n,0,0) is perpendicular to vector (0,-n,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereNegativeYX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, -ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,-n,0) is perpendicular to vector (-n,0,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WhereNegativeXPositiveY_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            Vector3 s2 = new Vector3(0, ArbitaryTestDouble, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (-n,0,0) is perpendicular to vector (0,n,0)");
+        }
+
+        [TestMethod, TestCategory("Angle")]
+        public void Angle_WherePositiveYNegativeX_ShouldResultIn90Deg_Test()
+        {
+            Vector3 s1 = new Vector3(0, ArbitaryTestDouble, 0);
+            Vector3 s2 = new Vector3(-ArbitaryTestDouble, 0, 0);
+            var result = s1.Angle(s2);
+
+            result.Should().Be(Deg90AsRad, "vector (0,n,0) is perpendicular to vector (-n,0,0)");
         }
 
         [TestMethod, TestCategory("Angle")]
@@ -394,6 +651,35 @@
         #endregion
 
         #region Normalize
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Magnitude_WithPositiveZeroVector_ShouldBe0_Test()
+        {
+            // Should the normalization of (0,0,0) be (0,0,0) or (nan, nan, nan) or exception
+
+            var vector = new Vector3(0, 0, 0);
+            var result = vector.Normalize();
+
+            result.Should().Be(new Vector3(0, 0, 0));
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Magnitude_WithNegativeZeroVector_ShouldBe0_Test()
+        {
+            var vector = new Vector3(-0, -0, -0);
+            var result = vector.Normalize();
+
+            result.Should().Be(new Vector3(0, 0, 0));
+        }
+
+        [TestMethod, TestCategory("v")]
+        public void Magnitude_WithPositievAndNegativeZeroVector_ShouldBe0_Test()
+        {
+            var vector = new Vector3(-0, +0, -0);
+            var result = vector.Normalize();
+
+            result.Should().Be(new Vector3(0, 0, 0));
+        }
 
         [TestMethod, TestCategory("Normalize")]
         public void Normalize_WithUnitVectorXIsOne_ShouldNotChangeDuringNormalization_Test()
