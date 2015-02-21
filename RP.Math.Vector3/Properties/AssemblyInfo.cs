@@ -14,4 +14,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.2.0.0")]
 [assembly: AssemblyFileVersion("1.2.0.0")]
 [assembly: InternalsVisibleTo("RP.Math.Vector3.Tests")]
+[assembly: InternalsVisibleTo("RP.Math.Vector31.Tests")]
+[assembly: InternalsVisibleTo("RP.Math.Vector3.Explorables")]
 

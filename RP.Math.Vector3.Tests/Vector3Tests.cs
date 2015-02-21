@@ -7,6 +7,7 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using RP.Math;
     using RP.Math.Exceptions;
 
     /// <summary>
