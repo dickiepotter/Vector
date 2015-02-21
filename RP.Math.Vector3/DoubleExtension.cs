@@ -1,7 +1,6 @@
 namespace RP.Math
 {
     using System;
-    using System.Runtime.CompilerServices;
 
     public static class DoubleExtension
     {
@@ -12,7 +11,7 @@ namespace RP.Math
         /// <param name="b">The double to compare with</param>
         /// <param name="maxAbsoluteError">The tolerance for the comparison compared against the difference of the two doubles</param>
         /// <returns>Truth if the doubles are equal within a tolerance</returns>
-        public static bool AlmostEquals(this double a, double b, double maxAbsoluteError)
+        public static bool EqualWithinTolerance(this double a, double b, double maxAbsoluteError)
         {
             double diff = Math.Abs(a - b);
 
@@ -34,12 +33,12 @@ namespace RP.Math
         /// <param name="maxRelativeError">The relative tolerance for the comparison</param>
         /// <returns>Truth if the doubles are equal within a tolerance</returns>
         /// <acknowalgement>http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm</acknowalgement>
-        public static bool AlmostEquals(this double a, double b, double maxAbsoluteError, double maxRelativeError)
+        public static bool EqualWithinTolerance(this double a, double b, double maxAbsoluteError, double maxRelativeError)
         {
             double absA = Math.Abs(a);
             double absB = Math.Abs(b);
 
-            if (AlmostEquals(a, b, maxAbsoluteError) )
+            if (EqualWithinTolerance(a, b, maxAbsoluteError) )
             {
                 return true;
             }
@@ -65,7 +64,7 @@ namespace RP.Math
         /// <param name="maxUlps">The Units in the Last Place (ulp)s that we </param>
         /// <returns>Truth if the doubles are equal within a tolerance</returns>
         /// <acknowalgement>http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm</acknowalgement>
-        public static bool AlmostEquals(this double a, double b, long maxUlps)
+        public static bool EqualToUlps(this double a, double b, long maxUlps)
         {
             if (a.Equals(b))
             {
