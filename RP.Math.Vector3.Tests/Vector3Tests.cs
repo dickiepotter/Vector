@@ -7,6 +7,14 @@
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using RP.Math.Exceptions;
+
+    /// <summary>
+    /// Unit tests for the <see cref="Vector3"/> class
+    /// </summary>
+    /// TODO Test Whathappens when we try to get the angle of vectors with (inf, n, n) and NaN components. We may need to add AnngleOrDefault but that seems wrong when getting scalar results. Should be NaN.
+    /// TODO Fix IsPerpendicular
+    /// TODO Test the logic of Abs
     [TestClass]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class Vector3Tests
@@ -60,8 +68,8 @@
 
         #region Abs Tests
 
-        [TestMethod]
-        public void AbsOfVector000Is0Test()
+        [TestMethod, TestCategory("Abs")]
+        public void Abs_WhereVectorIsZero_Test()
         {
             var vector = new Vector3(0, 0, 0);
             var result = vector.Abs();
@@ -226,6 +234,15 @@
         }
 
         [TestMethod, TestCategory("Magnitude")]
+        public void Magnitude_WithPositiveInfinityXAndOtherComponensAreWholeNumbers_ShouldBePositiveInfinity_Test()
+        {
+            var vector = new Vector3(double.PositiveInfinity, 3, 6);
+            var magnitude = vector.Magnitude;
+
+            magnitude.Should().Be(double.PositiveInfinity);
+        }
+
+        [TestMethod, TestCategory("Magnitude")]
         public void Magnitude_WithNegativeInfinityX_ShouldBePositiveInfinity_Test()
         {
             var vector = new Vector3(double.NegativeInfinity, 0, 0);
@@ -233,6 +250,15 @@
 
             // Check .Net framework logic for ABS Infinity
             (Math.Abs(double.NegativeInfinity)).Should().Be(double.PositiveInfinity, "the.Net framework should find ABS Negative Infinity equal to Positive Infinity(if this assumption is wrong then the logic of this test is also wrong");
+
+            magnitude.Should().Be(double.PositiveInfinity);
+        }
+
+        [TestMethod, TestCategory("Magnitude")]
+        public void Magnitude_WithNegativeInfinityXAndOtherComponensAreWholeNumbers_ShouldBePositiveInfinity_Test()
+        {
+            var vector = new Vector3(double.NegativeInfinity, 3, 6);
+            var magnitude = vector.Magnitude;
 
             magnitude.Should().Be(double.PositiveInfinity);
         }
@@ -504,7 +530,7 @@
         }
 
         [TestMethod, TestCategory("Angle")]
-        public void IAngle_WhereNegativeXY_ShouldResultIn90Deg_Test()
+        public void Angle_WhereNegativeXY_ShouldResultIn90Deg_Test()
         {
             Vector3 s1 = new Vector3(-ArbitaryTestDouble, 0, 0);
             Vector3 s2 = new Vector3(0, -ArbitaryTestDouble, 0);
@@ -653,32 +679,66 @@
         #region Normalize
 
         [TestMethod, TestCategory("Normalize")]
-        public void Magnitude_WithPositiveZeroVector_ShouldBe0_Test()
+        public void NormalizeOrDefault_WithPositiveZeroVector_ShouldBe0_Test()
         {
-            // Should the normalization of (0,0,0) be (0,0,0) or (nan, nan, nan) or exception
-
             var vector = new Vector3(0, 0, 0);
-            var result = vector.Normalize();
+            var result = vector.NormalizeOrDefault();
 
             result.Should().Be(new Vector3(0, 0, 0));
         }
 
         [TestMethod, TestCategory("Normalize")]
-        public void Magnitude_WithNegativeZeroVector_ShouldBe0_Test()
+        public void Normalize_WithPositiveZeroVector_ShouldThrowException_Test()
+        {
+            var vector = new Vector3(0, 0, 0);
+            Action action = () => vector.Normalize();
+
+            action.ShouldThrow<NormalizeVectorException>();
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithNegativeZeroVector_ShouldBe0_Test()
         {
             var vector = new Vector3(-0, -0, -0);
-            var result = vector.Normalize();
+            var result = vector.NormalizeOrDefault();
 
             result.Should().Be(new Vector3(0, 0, 0));
         }
 
-        [TestMethod, TestCategory("v")]
-        public void Magnitude_WithPositievAndNegativeZeroVector_ShouldBe0_Test()
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithNegativeZeroVector_ShouldThrowException_Test()
+        {
+            var vector = new Vector3(-0, -0, -0);
+            Action action = () => vector.Normalize();
+
+            action.ShouldThrow<NormalizeVectorException>();
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithPositievAndNegativeZeroVector_ShouldBe0_Test()
         {
             var vector = new Vector3(-0, +0, -0);
-            var result = vector.Normalize();
+            var result = vector.NormalizeOrDefault();
 
             result.Should().Be(new Vector3(0, 0, 0));
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithPositievAndNegativeZeroVector_ShouldThrowException_Test()
+        {
+            var vector = new Vector3(-0, +0, -0);
+            Action action = () => vector.Normalize();
+
+            action.ShouldThrow<NormalizeVectorException>();
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithPositievAndNegativeZeroVector_ShouldThrowException_Test()
+        {
+            var vector = new Vector3(-0, +0, -0);
+            var result = vector.NormalizeOrDefault();
+
+            result.Should().Be(new Vector3(-0, +0, -0));
         }
 
         [TestMethod, TestCategory("Normalize")]
@@ -686,6 +746,17 @@
         {
             var vector = new Vector3(1, 0, 0);
             var result = vector.Normalize();
+
+            result.X.Should().Be(1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithUnitVectorXIsOne_ShouldNotChangeDuringNormalization_Test()
+        {
+            var vector = new Vector3(1, 0, 0);
+            var result = vector.NormalizeOrDefault();
 
             result.X.Should().Be(1);
             result.Y.Should().Be(0);
@@ -704,9 +775,62 @@
         }
 
         [TestMethod, TestCategory("Normalize")]
-        public void Normalize_WithUnitVectorXIsPositiveInfinity_ShouldResultInXBeingNegativeOne_Test()
+        public void NormalizeOrDefault_WithUnitVectorXIsNegativeOne_ShouldNotChangeDuringNormalization_Test()
+        {
+            var vector = new Vector3(-1, 0, 0);
+            var result = vector.NormalizeOrDefault();
+
+            result.X.Should().Be(-1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsPositiveInfinity_ShouldResultInXBeingOne_Test()
         {
             var vector = new Vector3(double.PositiveInfinity, 0, 0);
+            var result = vector.Normalize();
+
+            result.X.Should().Be(1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithUnitVectorXIsPositiveInfinity_ShouldResultInXBeingOne_Test()
+        {
+            var vector = new Vector3(double.PositiveInfinity, 0, 0);
+            var result = vector.NormalizeOrDefault();
+
+            result.X.Should().Be(1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithVectorXIsPositiveInfinityAndOtherComponentsAreNotNull_ShouldThrowException_Test()
+        {
+            var vector = new Vector3(double.PositiveInfinity, 3, 6);
+            Action action = () => vector.Normalize();
+
+            action.ShouldThrow<NormalizeVectorException>();
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithVectorXIsPositiveInfinityAndOtherComponentsAreNotNull_ShouldResultInNaN_Test()
+        {
+            var vector = new Vector3(double.PositiveInfinity, 3, 6);
+            var result = vector.NormalizeOrDefault();
+
+            result.X.Should().Be(double.NaN);
+            result.Y.Should().Be(double.NaN);
+            result.Z.Should().Be(double.NaN);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void Normalize_WithUnitVectorXIsNegativeInfinity_ShouldResultInXBeingOne_Test()
+        {
+            var vector = new Vector3(double.NegativeInfinity, 0, 0);
             var result = vector.Normalize();
 
             result.X.Should().Be(-1);
@@ -715,10 +839,30 @@
         }
 
         [TestMethod, TestCategory("Normalize")]
-        public void Normalize_WithUnitVectorXIsNegativeInfinity_ShouldResultInXBeingOne_Test()
+        public void Normalize_WithVectorXIsNegativeInfinityAndOtherComponentsAreNotNull_ShouldThrowException_Test()
+        {
+            var vector = new Vector3(double.NegativeInfinity, 3, 6);
+            Action action = () => vector.Normalize();
+
+            action.ShouldThrow<NormalizeVectorException>();
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithVectorXIsNegativeInfinityAndOtherComponentsAreNotNull_ShouldResultInNaN_Test()
+        {
+            var vector = new Vector3(double.NegativeInfinity, 3, 6);
+            var result = vector.NormalizeOrDefault();
+
+            result.X.Should().Be(double.NaN);
+            result.Y.Should().Be(double.NaN);
+            result.Z.Should().Be(double.NaN);
+        }
+
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithUnitVectorXIsNegativeInfinity_ShouldResultInXBeingOne_Test()
         {
             var vector = new Vector3(double.NegativeInfinity, 0, 0);
-            var result = vector.Normalize();
+            var result = vector.NormalizeOrDefault();
 
             result.X.Should().Be(-1);
             result.Y.Should().Be(0);
@@ -736,25 +880,35 @@
             result.Z.Should().Be(0);
         }
 
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithUnitVectorXIsPositiveNumber_ShouldResultInXBeingOne_Test()
+        {
+            var vector = new Vector3(10, 0, 0);
+            var result = vector.NormalizeOrDefault();
+
+            result.X.Should().Be(1);
+            result.Y.Should().Be(0);
+            result.Z.Should().Be(0);
+        }
+
         /// <summary>
         /// Test that vectors containing a NaN component will throw an exception when being Normalized
         /// </summary>
-        /// <ignored>This test is for an alternative decision on implementation, <see cref="Normalize_WithUnitVectorXIsNaN_ShouldReturnXYZOfNaN_Test"/></ignored>
-        [TestMethod, TestCategory("Normalize"), Ignore]
+        [TestMethod, TestCategory("Normalize")]
         public void Normalize_WithUnitVectorXIsNaN_ShouldThrowException_Test()
         {
             var vector = new Vector3(double.NaN, 0, 0);
 
             Action act = () => vector.Normalize();
 
-            act.ShouldThrow<InvalidOperationException>("you should not be able to normalize NaN values");
+            act.ShouldThrow<NormalizeVectorException>("you should not be able to normalize NaN values");
         }
 
         [TestMethod, TestCategory("Normalize")]
-        public void Normalize_WithUnitVectorXIsNaN_ShouldReturnXYZOfNaN_Test()
+        public void NormalizeOrDefault_WithUnitVectorXIsNaN_ShouldReturnXYZOfNaN_Test()
         {
             var vector = new Vector3(double.NaN, 0, 0);
-            var result = vector.Normalize();
+            var result = vector.NormalizeOrDefault();
 
             result.X.Should().Be(double.NaN);
             result.Y.Should().Be(double.NaN);
@@ -770,6 +924,20 @@
         {
             var vector = new Vector3(3, 1, 2);
             var result = vector.Normalize();
+
+            result.X.Should().BeInRange(0.8014, 0.8026);
+            result.Y.Should().BeInRange(0.2664, 0.2676);
+            result.Z.Should().BeInRange(0.5334, 0.5346);
+        }
+
+        /// <summary>
+        /// Test the normalization of a vector
+        /// </summary>
+        [TestMethod, TestCategory("Normalize")]
+        public void NormalizeOrDefault_WithPositiveWholeNumbers_ShouldBeCorrect_Test()
+        {
+            var vector = new Vector3(3, 1, 2);
+            var result = vector.NormalizeOrDefault();
 
             result.X.Should().BeInRange(0.8014, 0.8026);
             result.Y.Should().BeInRange(0.2664, 0.2676);
@@ -1620,6 +1788,15 @@
         #region Is Unit Vector Tests
 
         [TestMethod, TestCategory("IsUnitVector")]
+        public void IsUnitVector_WhereXIsNaN_ShouldBeFalse_Test()
+        {
+            Vector3 s1 = new Vector3(double.NaN, 0, 0);
+            var result = s1.IsUnitVector();
+
+            result.Should().Be(false, "vector (NaN,0,0) is not a unit vector");
+        }
+
+        [TestMethod, TestCategory("IsUnitVector")]
         public void IsUnitVector_x1y0z0_ShouldBeTrue_Test()
         {
             Vector3 s1 = new Vector3(1, 0, 0);
@@ -2066,6 +2243,64 @@
             var result = s1.IsPerpendicular(s2, 1);
 
             result.Should().Be(false, "vector (NaN,0,0) is not perpendicular to vector (0,NaN,0) regardless of tolerance");
+        }
+
+        #endregion
+
+        #region IsNaN
+
+        [TestMethod, TestCategory("IsNaN")]
+        public void IsNaN_WithXIsNaN_ShouldBeTrue_Test()
+        {
+            Vector3 v1 = new Vector3(double.NaN, 0, 0);
+            var result = v1.IsNaN();
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("IsNaN")]
+        public void IsNaN_WithYIsNaN_ShouldBeTrue_Test()
+        {
+            Vector3 v1 = new Vector3(0, double.NaN, 0);
+            var result = v1.IsNaN();
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("IsNaN")]
+        public void IsNaN_WithZIsNaN_ShouldBeTrue_Test()
+        {
+            Vector3 v1 = new Vector3(0, 0, double.NaN);
+            var result = v1.IsNaN();
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("IsNaN")]
+        public void IsNaN_WithYZIsNaN_ShouldBeTrue_Test()
+        {
+            Vector3 v1 = new Vector3(0, double.NaN, double.NaN);
+            var result = v1.IsNaN();
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("IsNaN")]
+        public void IsNaN_WithXYZIsNaN_ShouldBeTrue_Test()
+        {
+            Vector3 v1 = new Vector3(double.NaN, double.NaN, double.NaN);
+            var result = v1.IsNaN();
+
+            result.Should().Be(true);
+        }
+
+        [TestMethod, TestCategory("IsNaN")]
+        public void IsNaN_WithXYZWholeNumbers_ShouldBeFalse_Test()
+        {
+            Vector3 v1 = new Vector3(1, 2, 3);
+            var result = v1.IsNaN();
+
+            result.Should().Be(false);
         }
 
         #endregion
