@@ -2324,7 +2324,7 @@
 
             // Check the tolerance on the angle
             var angle = v1.Angle(v2);
-            angle.EqualWithinTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
+            angle.AlmostEqualsWithAbsTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
 
             // Check the actual result
             result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (1,0.001,0)");
@@ -2340,7 +2340,7 @@
 
             // Check the tolerance on the angle after normalization
             var angle = v1.NormalizeOrDefault().Angle(v2.NormalizeOrDefault());
-            angle.EqualWithinTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
+            angle.AlmostEqualsWithAbsTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
 
             // Check the actual result
             result.Should().Be(true, "vector (0,+inf,0) is perpendicular to vector (+inf,0.001,0)");

@@ -6,8 +6,8 @@
     <ProjectGuid>{81449F7F-67D3-44EE-8D1D-C9B39A76E6CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RP.Math.Vector3.Tests</RootNamespace>
-    <AssemblyName>RP.Math.Vector3.Tests</AssemblyName>
+    <RootNamespace>RP.Math.Tests</RootNamespace>
+    <AssemblyName>RP.Math.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -56,8 +56,13 @@
       <Project>{807FD959-E9BD-4C60-8A32-5BB04B8E79E0}</Project>
       <Name>RP.Math.Vector3</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RP.Math\RP.Math.csproj">
+      <Project>{AE16868E-5A0F-4CC7-BAEF-B3F1536D793D}</Project>
+      <Name>RP.Math</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpandedDoubleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PexAssemblyInfo.cs" />
     <Compile Include="DoubleExtensionTests.cs" />

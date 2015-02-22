@@ -11,12 +11,16 @@ namespace RP.Math
         /// <param name="b">The double to compare with</param>
         /// <param name="maxAbsoluteError">The tolerance for the comparison compared against the difference of the two doubles</param>
         /// <returns>Truth if the doubles are equal within a tolerance</returns>
-        public static bool EqualWithinTolerance(this double a, double b, double maxAbsoluteError)
+        /// <remarks>
+        /// Use this tolerant equality method if comparing against zero. The tolerance should be a small multiple of <see cref="double.Epsilon"/>.
+        /// Also, check that you are not comparing floats and doubles.
+        /// </remarks>
+        public static bool AlmostEqualsWithAbsTolerance(this double a, double b, double maxAbsoluteError)
         {
             double diff = Math.Abs(a - b);
 
             if (a.Equals(b))
-            { 
+            {
                 // shortcut, handles infinities
                 return true;
             }
@@ -33,15 +37,26 @@ namespace RP.Math
         /// <param name="maxRelativeError">The relative tolerance for the comparison</param>
         /// <returns>Truth if the doubles are equal within a tolerance</returns>
         /// <acknowalgement>http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm</acknowalgement>
-        public static bool EqualWithinTolerance(this double a, double b, double maxAbsoluteError, double maxRelativeError)
+        /// <remarks>
+        /// Quote from: http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+        /// If you are comparing against a non-zero number then relative epsilons or ULPs based comparisons are probably what you want. 
+        /// You’ll probably want some small multiple of double.Epsilon for your relative epsilon, or some small number of ULPs. 
+        /// An absolute epsilon could be used if you knew exactly what number you were comparing against.</remarks>
+        public static bool AlmostEqualsWithAbsOrRelativeTolerance(
+            this double a,
+            double b,
+            double maxAbsoluteError,
+            double maxRelativeError)
         {
-            double absA = Math.Abs(a);
-            double absB = Math.Abs(b);
-
-            if (EqualWithinTolerance(a, b, maxAbsoluteError) )
+            // Needed if we are comparing to zero
+            if (AlmostEqualsWithAbsTolerance(a, b, maxAbsoluteError))
             {
                 return true;
             }
+
+            // Check the relative tolerance
+            double absA = Math.Abs(a);
+            double absB = Math.Abs(b);
 
             double relativeError;
             if (absB > absA)
@@ -57,21 +72,31 @@ namespace RP.Math
         }
 
         /// <summary>
-        /// Comparator within a numer of significan 
+        /// Comparator within a numer of units in the last place that we are tolerant of 
         /// </summary>
         /// <param name="a">The double to compare to</param>
         /// <param name="b">The double to compare with</param>
-        /// <param name="maxUlps">The Units in the Last Place (ulp)s that we </param>
+        /// <param name="maxUlps">The Units in the Last Place (ulp)s that we are tolerant of</param>
         /// <returns>Truth if the doubles are equal within a tolerance</returns>
         /// <acknowalgement>http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm</acknowalgement>
-        public static bool EqualToUlps(this double a, double b, long maxUlps)
+        /// <remarks>
+        /// Quote from: http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+        /// If you are comparing against a non-zero number then relative epsilons or ULPs based comparisons are probably what you want. 
+        /// You’ll probably want some small multiple of double.Epsilon for your relative epsilon, or some small number of ULPs. 
+        /// An absolute epsilon could be used if you knew exactly what number you were comparing against.</remarks>
+        public static bool AlmostEqualsWithAbsOrUlpsTolerance(
+            this double a,
+            double b,
+            double maxAbsoluteError,
+            long maxUlps)
         {
-            if (a.Equals(b))
+            // Needed if we are comparing to zero
+            if (AlmostEqualsWithAbsTolerance(a, b, maxAbsoluteError))
             {
-                // shortcut, handles infinities
                 return true;
             }
 
+            // Check the ULPS tolerance
             long aAsBits = a.To2Compliment();
             long bAsBits = b.To2Compliment();
             long diff = Math.Abs(aAsBits - bAsBits);
@@ -83,13 +108,11 @@ namespace RP.Math
         /// </summary>
         /// <param name="value">The double to convert</param>
         /// <returns>The twos complement long representation of a double</returns>
-        private static long To2Compliment(this double value)
+        internal static long To2Compliment(this double value)
         {
             long valueAsLong = BitConverter.DoubleToInt64Bits(value);
 
-            return valueAsLong < 0
-                ? (long)(0x8000000000000000 - (ulong)valueAsLong)
-                : valueAsLong;
+            return valueAsLong < 0 ? (long)(0x8000000000000000 - (ulong)valueAsLong) : valueAsLong;
         }
     }
 }
