@@ -16,7 +16,270 @@ namespace RP.Math.Tests
     [TestClass]
     public class ExpandedDoubleTests
     {
-        #region Construction Tests
+        #region IsNegative Tests
+
+        [TestMethod, TestCategory("IsNegative")]
+        public void Construction_WherePositiveWholeNumber_ShouldBePositive_Test()
+        {
+            double d = 100;
+            var result = new ExpandedDouble(d);
+
+            result.IsNegative.Should().Be(false, "100 is a positive number");
+        }
+
+        [TestMethod, TestCategory("IsNegative")]
+        public void Construction_WhereNegativeWholeNumber_ShouldBeNagative_Test()
+        {
+            double d = -100;
+            var result = new ExpandedDouble(d);
+
+            result.IsNegative.Should().Be(true, "-100 is a negative number");
+        }
+
+        [TestMethod, TestCategory("IsNegative")]
+        public void Construction_WherePositiveFloatingPointNumber_ShouldBePositive_Test()
+        {
+            double d = 100.005;
+            var result = new ExpandedDouble(d);
+
+            result.IsNegative.Should().Be(false, "100.005 is a positive number");
+        }
+
+        [TestMethod, TestCategory("IsNegative")]
+        public void Construction_WhereNegativeFloatingPointNumber_ShouldBeNagative_Test()
+        {
+            double d = -100.005;
+            var result = new ExpandedDouble(d);
+
+            result.IsNegative.Should().Be(true, "-100.005 is a negative number");
+        }
+
+        [TestMethod, TestCategory("IsNegative")]
+        public void Construction_WherePositiveInfinity_ShouldBePositive_Test()
+        {
+            double d = double.PositiveInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsNegative.Should().Be(false, "+inf is a positive number");
+        }
+
+        [TestMethod, TestCategory("IsNegative")]
+        public void Construction_WhereNegativeInfinity_ShouldBeNagative_Test()
+        {
+            double d = double.NegativeInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsNegative.Should().Be(true, "-inf is a negative number");
+        }
+
+        [TestMethod, TestCategory("IsNegative")]
+        public void Construction_WhereNaN_ShouldBePositive_Test()
+        {
+            // Todo: We should maybe throw an exception when testing the sign of NaN instead
+            double d = double.NaN;
+            var result = new ExpandedDouble(d);
+
+            result.IsNegative.Should().Be(true, "-NaN is a negative number");
+        }
+
+        #endregion
+
+        #region IsNaN Tests
+
+        [TestMethod]
+        public void IsNaN_WithNaN_ShouldBeTrue_Test()
+        {
+            double d = double.NaN;
+            var result = new ExpandedDouble(d);
+
+            result.IsNaN.Should().Be(true);
+        }
+
+        [TestMethod]
+        public void IsNaN_WithOne_ShouldBeFalse_Test()
+        {
+            double d = 1d;
+            var result = new ExpandedDouble(d);
+
+            result.IsNaN.Should().Be(false);
+        }
+
+        [TestMethod]
+        public void IsNaN_WithNegativeOne_ShouldBeFalse_Test()
+        {
+            double d = -1d;
+            var result = new ExpandedDouble(d);
+
+            result.IsNaN.Should().Be(false);
+        }
+
+        [TestMethod]
+        public void IsSignnallingNaN_WithSignallingNaN_ShouldBeTrue_Test()
+        {
+            double d = 0d / 0d;
+            var result = new ExpandedDouble(d);
+
+            result.IsSignallingNaN.Should().Be(true);
+        }
+
+        [TestMethod]
+        public void IsQuietNaN_WithSignallingNaN_ShouldBeTrue_Test()
+        {
+            double d = 0d / 0d;
+            var result = new ExpandedDouble(d);
+
+            result.IsQuietNaN.Should().Be(true);
+        }
+
+        #endregion
+
+        #region IsInfinte
+
+        [TestMethod]
+        public void IsInfinite_WithPositiveInfinity_ShouldBeTrue_Test()
+        {
+            double d = double.PositiveInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(true);
+        }
+
+        [TestMethod]
+        public void IsInfinite_WithNegativeInfinity_ShouldBeTrue_Test()
+        {
+            double d = double.NegativeInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(true);
+        }
+
+        [TestMethod]
+        public void IsInfinite_WithOne_ShouldBeFalse_Test()
+        {
+            double d = 1d;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(false);
+        }
+
+        [TestMethod]
+        public void IsPositiveInfinity_WithPositiveInfinity_ShouldBeTrue_Test()
+        {
+            double d = double.PositiveInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(true);
+        }
+
+        [TestMethod]
+        public void IsPositiveInfinity_WithNegativeInfinity_ShouldBeFalse_Test()
+        {
+            double d = double.NegativeInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(false);
+        }
+
+        [TestMethod]
+        public void IsPositiveInfinitye_WithOne_ShouldBeFalse_Test()
+        {
+            double d = 1d;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(false);
+        }
+
+        [TestMethod]
+        public void IsNegativeInfinity_WithPositiveInfinity_ShouldBeFalse_Test()
+        {
+            double d = double.PositiveInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(false);
+        }
+
+        [TestMethod]
+        public void IsNegativeInfinity_WithNegativeInfinity_ShouldBeTrue_Test()
+        {
+            double d = double.NegativeInfinity;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(true);
+        }
+
+        [TestMethod]
+        public void IsNegativeInfinitye_WithOne_ShouldBeFalse_Test()
+        {
+            double d = 1d;
+            var result = new ExpandedDouble(d);
+
+            result.IsInifinite.Should().Be(false);
+        }
+
+        #endregion
+
+        #region Exponent
+
+        [TestMethod]
+        public void ExponentAsStored_WhereExponentIsNotZero_ShouldBeCorrect_Test()
+        {
+            double d = 75.5;
+            var result = new ExpandedDouble(d);
+
+            result.ExponentAsStored.Should().Be(1029, "The exponent of 75.5 should be 1029 before removing the bias");
+        }
+
+        [TestMethod]
+        public void Exponent_WhereExponentIsNotZero_ShouldBeCorrect_Test()
+        {
+            double d = 75.5;
+            var result = new ExpandedDouble(d);
+
+            result.Exponent.Should().Be(3, "The exponent of 75.5 should be 3 after removing the bias");
+        }
+
+        [TestMethod]
+        public void ExponentBitsAsStored_WhereExponentIsNotZero_ShouldBeCorrect_Test()
+        {
+            double d = 75.5;
+            var result = new ExpandedDouble(d);
+
+            result.ExponentBitsAsStored.Should().BeEquivalentTo(1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1);
+        }
+
+        #endregion
+
+        #region Mantissa
+
+        [TestMethod]
+        public void MantissaAsStored_WhereExponentIsNotZero_ShouldBeCorrect_Test()
+        {
+            double d = 75.5;
+            var result = new ExpandedDouble(d);
+
+            result.MantissaAsStored.Should().Be(809240558043136, "The exponent of 75.5 should be 809240558043136 as it is stored in binary");
+        }
+
+        [TestMethod]
+        public void Mantissa_WhereExponentIsNotZero_ShouldBeCorrect_Test()
+        {
+            double d = 75.5;
+            var result = new ExpandedDouble(d);
+
+            result.Mantissa.Should().Be(809240558043136, "The exponent of 75.5 should be 809240558043136");
+        }
+
+        [TestMethod]
+        public void MantissaBitsAsStored_WhereExponentIsNotZero_ShouldBeCorrect_Test()
+        {
+            double d = 75.5;
+            var result = new ExpandedDouble(d);
+
+            result.MantissaBitsAsStored.Should()
+                .BeEquivalentTo(0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+
+        #endregion
 
         // TODO Need a better understanding of the underlying structure of doubles, this test is plain wrong
         [TestMethod, TestCategory("Construction"), Ignore]
@@ -25,11 +288,10 @@ namespace RP.Math.Tests
             double d = 100;
             var result = new ExpandedDouble(d);
 
-            result.IsNegative.Should().Be(false, "100.5 is a positive number");
-            result.Exponent.Should().Be(1, "the exponent of 100.5 is 1");
-            result.Mantissa.Should().Be(1005, "the mantissa of 100.5 is 1005");
+            result.IsNegative.Should().Be(false, "100 is a positive number");
+            result.Exponent.Should().Be(1, "the exponent of 100 is 1");
+            result.Mantissa.Should().Be(100, "the mantissa of 100 is 100");
         }
 
-        #endregion
     }
 }
