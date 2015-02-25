@@ -34,6 +34,7 @@ namespace RP.Math
         /// <param name="d"></param>
         public ExpandedDouble(double d)
         {
+            // Bit converter will also sort out the edian-ness for the current hardware platform.
             this.bits = (ulong)BitConverter.DoubleToInt64Bits(d);
         }
 
@@ -59,7 +60,7 @@ namespace RP.Math
         public bool IsNormalised {
             get
             {
-                return Exponent != 0;
+                return ExponentAsStored != 0;
             }
         }
 
@@ -70,7 +71,7 @@ namespace RP.Math
         {
             get
             {
-                return Exponent == 0;
+                return ExponentAsStored == 0;
             }
         }
 
@@ -81,7 +82,7 @@ namespace RP.Math
         {
             get
             {
-                return ExponentAsStored == ReservedValueExponent && Mantissa != 0;
+                return ExponentAsStored == ReservedValueExponent && MantissaAsStored != 0;
             }
         }
 
@@ -93,7 +94,7 @@ namespace RP.Math
         {
             get
             {
-                return ExponentAsStored == ReservedValueExponent && Mantissa == 1;
+                return ExponentAsStored == ReservedValueExponent && MantissaAsStored == 1;
             }
         }
 
@@ -105,7 +106,7 @@ namespace RP.Math
         {
             get
             {
-                return ExponentAsStored == ReservedValueExponent && Mantissa > 1;
+                return ExponentAsStored == ReservedValueExponent && MantissaAsStored > 1;
             }
         }
 
@@ -116,7 +117,7 @@ namespace RP.Math
         {
             get
             {
-                return ExponentAsStored == ReservedValueExponent && Mantissa == 0;
+                return ExponentAsStored == ReservedValueExponent && MantissaAsStored == 0;
             }
         }
 

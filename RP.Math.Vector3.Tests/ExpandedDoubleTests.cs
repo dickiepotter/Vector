@@ -113,10 +113,13 @@ namespace RP.Math.Tests
             result.IsNaN.Should().Be(false);
         }
 
-        [TestMethod]
+        /// <summary>
+        /// Check for Signalling NaN. Ignored: I haven't found a way of producing a SNaN.
+        /// </summary>
+        [TestMethod, Ignore]
         public void IsSignnallingNaN_WithSignallingNaN_ShouldBeTrue_Test()
         {
-            double d = 0d / 0d;
+            double d = 0d / 0d; // Produces quite NaN
             var result = new ExpandedDouble(d);
 
             result.IsSignallingNaN.Should().Be(true);
@@ -168,7 +171,7 @@ namespace RP.Math.Tests
             double d = double.PositiveInfinity;
             var result = new ExpandedDouble(d);
 
-            result.IsInifinite.Should().Be(true);
+            result.IsPositiveInfinity.Should().Be(true);
         }
 
         [TestMethod]
@@ -177,7 +180,7 @@ namespace RP.Math.Tests
             double d = double.NegativeInfinity;
             var result = new ExpandedDouble(d);
 
-            result.IsInifinite.Should().Be(false);
+            result.IsPositiveInfinity.Should().Be(false);
         }
 
         [TestMethod]
@@ -186,7 +189,7 @@ namespace RP.Math.Tests
             double d = 1d;
             var result = new ExpandedDouble(d);
 
-            result.IsInifinite.Should().Be(false);
+            result.IsPositiveInfinity.Should().Be(false);
         }
 
         [TestMethod]
@@ -195,7 +198,7 @@ namespace RP.Math.Tests
             double d = double.PositiveInfinity;
             var result = new ExpandedDouble(d);
 
-            result.IsInifinite.Should().Be(false);
+            result.IsNegativeInfinity.Should().Be(false);
         }
 
         [TestMethod]
@@ -204,16 +207,16 @@ namespace RP.Math.Tests
             double d = double.NegativeInfinity;
             var result = new ExpandedDouble(d);
 
-            result.IsInifinite.Should().Be(true);
+            result.IsNegativeInfinity.Should().Be(true);
         }
 
         [TestMethod]
-        public void IsNegativeInfinitye_WithOne_ShouldBeFalse_Test()
+        public void IsNegativeInfinity_WithOne_ShouldBeFalse_Test()
         {
             double d = 1d;
             var result = new ExpandedDouble(d);
 
-            result.IsInifinite.Should().Be(false);
+            result.IsNegativeInfinity.Should().Be(false);
         }
 
         #endregion
@@ -261,7 +264,7 @@ namespace RP.Math.Tests
         }
 
         [TestMethod]
-        public void Mantissa_WhereExponentIsNotZero_ShouldBeCorrect_Test()
+        public void Mantissa_WhereExponentIsNotZero_ShouldBeCorrectWithImpliedLeadingOne_Test()
         {
             double d = 75.5;
             var result = new ExpandedDouble(d);
@@ -281,17 +284,25 @@ namespace RP.Math.Tests
 
         #endregion
 
-        // TODO Need a better understanding of the underlying structure of doubles, this test is plain wrong
-        [TestMethod, TestCategory("Construction"), Ignore]
-        public void Construction_WhereWholeNumberDouble_ShouldSplitCorrectly_Test()
+
+        // Still not understanding this correctly
+        [TestMethod]
+        public void WorkedExample_WhereDoubleIsWholeNumber_ShouldBeCorrect_Test()
         {
-            double d = 100;
+            double d = 6;
             var result = new ExpandedDouble(d);
 
-            result.IsNegative.Should().Be(false, "100 is a positive number");
-            result.Exponent.Should().Be(1, "the exponent of 100 is 1");
-            result.Mantissa.Should().Be(100, "the mantissa of 100 is 100");
-        }
+            // no sign
+            result.IsNegative.Should().Be(false, "6 is not negative");
 
+            // Binary this is 0110(base 2);
+            // Mantissa has implied leading one giving 1.0110
+            // Exponent should be 4 giving 10110
+            result.Exponent.Should().Be(4, "exponent of 6 should be 4"); // TODO - Exponent is -1 giviong us 
+
+            // But leading one is implied
+            // so the mantissa should still be 0110(base 2) = 6(base 10)
+            result.Mantissa.Should().Be(6, "The mantissa is little edian and should result in 6");
+        }
     }
 }
