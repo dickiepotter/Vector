@@ -86,9 +86,25 @@
         [TestMethod, TestCategory("AlmostEqualsWithAbsOrUlpsTolerance")]
         public void AlmostEqualsWithAbsOrUlpsTolerance_WithFloatingPointNumbersAndValidUlpsAndZeroAbsoluteTolerance_ShouldBeTrue_Test()
         {
-            var result = DoubleExtension.AlmostEqualsWithAbsOrUlpsTolerance(67329.234d, 67329.242d, 0, 1);
+            var result = DoubleExtension.AlmostEqualsWithAbsOrUlpsTolerance(67329.243d, 67329.242d, 0.01d, 1);
 
-            result.Should().Be(true, "these number are exactly one ULP apart (the last digit)");
+            result.Should().Be(true, "these numbers are within 0.01 difference");
+        }
+
+        /// <summary>
+        /// Test "Units in last place" tolerance.
+        /// </summary>
+        /// <acknowlagement>https://github.com/nunit/nunit</acknowlagement>
+        [TestMethod, TestCategory("AlmostEqualsWithAbsOrUlpsTolerance")]
+        public void AlmostEqualsWithAbsOrUlpsTolerance_WithFloatingPointValues_ShouldBeCorrect_Test()
+        {
+            DoubleExtension.AlmostEqualsWithAbsOrUlpsTolerance(0.00000001, 0.000000010000000000000002, 0, 1).Should().Be(true);
+            
+            DoubleExtension.AlmostEqualsWithAbsOrUlpsTolerance(0.00000001, 0.000000010000000000000004, 0, 1).Should().Be(false);
+ 
+            DoubleExtension.AlmostEqualsWithAbsOrUlpsTolerance(1000000.00, 1000000.0000000001, 0, 1).Should().Be(true);
+
+            DoubleExtension.AlmostEqualsWithAbsOrUlpsTolerance(1000000.00, 1000000.0000000002, 0, 1).Should().Be(false);
         }
 
         #endregion

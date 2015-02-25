@@ -72,7 +72,7 @@ namespace RP.Math
         }
 
         /// <summary>
-        /// Comparator within a numer of units in the last place that we are tolerant of 
+        /// Comparator within a numer of units in the last place that we are tolerant of (the numerb of "floats" difference that is acceptable)
         /// </summary>
         /// <param name="a">The double to compare to</param>
         /// <param name="b">The double to compare with</param>
@@ -97,22 +97,14 @@ namespace RP.Math
             }
 
             // Check the ULPS tolerance
-            long aAsBits = a.To2Compliment();
-            long bAsBits = b.To2Compliment();
-            long diff = Math.Abs(aAsBits - bAsBits);
+            long longA = BitConverter.DoubleToInt64Bits(a);
+            longA = longA < 0 ? (long)(0x8000000000000000 - (ulong)longA) : longA;
+
+            long longB = BitConverter.DoubleToInt64Bits(b);
+            longB = longB < 0 ? (long)(0x8000000000000000 - (ulong)longB) : longB;
+
+            long diff = Math.Abs(longA - longB);
             return diff <= maxUlps;
-        }
-
-        /// <summary>
-        /// Get the twos complement long representation of a double.
-        /// </summary>
-        /// <param name="value">The double to convert</param>
-        /// <returns>The twos complement long representation of a double</returns>
-        internal static long To2Compliment(this double value)
-        {
-            long valueAsLong = BitConverter.DoubleToInt64Bits(value);
-
-            return valueAsLong < 0 ? (long)(0x8000000000000000 - (ulong)valueAsLong) : valueAsLong;
         }
     }
 }
