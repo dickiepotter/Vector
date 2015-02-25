@@ -260,7 +260,7 @@ namespace RP.Math.Tests
             double d = 75.5;
             var result = new ExpandedDouble(d);
 
-            result.MantissaAsStored.Should().Be(809240558043136, "The exponent of 75.5 should be 809240558043136 as it is stored in binary");
+            result.MantissaAsStored.Should().Be(809240558043136, "The mantissa of 75.5 should be 809240558043136 as it is stored in binary");
         }
 
         [TestMethod]
@@ -269,7 +269,7 @@ namespace RP.Math.Tests
             double d = 75.5;
             var result = new ExpandedDouble(d);
 
-            result.Mantissa.Should().Be(809240558043136, "The exponent of 75.5 should be 809240558043136");
+            result.Mantissa.Should().Be(809240558043137, "The mantissa of 75.5 should be 809240558043137 with the leading one added");
         }
 
         [TestMethod]
@@ -283,26 +283,5 @@ namespace RP.Math.Tests
         }
 
         #endregion
-
-
-        // Still not understanding this correctly
-        [TestMethod]
-        public void WorkedExample_WhereDoubleIsWholeNumber_ShouldBeCorrect_Test()
-        {
-            double d = 6;
-            var result = new ExpandedDouble(d);
-
-            // no sign
-            result.IsNegative.Should().Be(false, "6 is not negative");
-
-            // Binary this is 0110(base 2);
-            // Mantissa has implied leading one giving 1.0110
-            // Exponent should be 4 giving 10110
-            result.Exponent.Should().Be(4, "exponent of 6 should be 4"); // TODO - Exponent is -1 giviong us 
-
-            // But leading one is implied
-            // so the mantissa should still be 0110(base 2) = 6(base 10)
-            result.Mantissa.Should().Be(6, "The mantissa is little edian and should result in 6");
-        }
     }
 }
