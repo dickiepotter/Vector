@@ -2293,6 +2293,16 @@
         }
 
         [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereZeroAndZero_ShouldBeFalse_Test()
+        {
+            Vector3 v1 = new Vector3(0, 0, 0);
+            Vector3 v2 = new Vector3(0, 0, 0);
+            var result = v1.IsPerpendicular(v2);
+
+            result.Should().Be(false, "vector (0,0,0) is not perpendicular to vector (0,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
         public void IsPerpendicularWithTolerance_WhereUnitVectorsPositiveXYAndThereIsNoError_ShouldBeTrue_Test()
         {
             Vector3 v1 = new Vector3(0, 1, 0);
@@ -2330,7 +2340,12 @@
             result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (1,0.001,0)");
         }
 
-        [TestMethod, TestCategory("IsPerpendicular")]
+        /// <summary>
+        /// Check that the special case vectors use the tolerance when determinitng if it is a apecial case.
+        /// Ignored: This should not work! The tolerance is for the dot product equality to 0 NOT for special case snap to zero.
+        /// We could add another parameter, i.e. SpecialCaseSnapToZeroTolerance but we are making special cases more complicated.
+        /// </summary>
+        [TestMethod, TestCategory("IsPerpendicular"), Ignore]
         public void IsPerpendicularWithTolerance_WhereUnitVectorsInfinitePositiveXYAndThereIsAnError_ShouldBeTrue_Test()
         {
             Vector3 v1 = new Vector3(0, double.PositiveInfinity, 0);
@@ -2384,6 +2399,16 @@
             var result = v1.IsPerpendicular(v2, 1);
 
             result.Should().Be(false, "vector (NaN,0,0) is not perpendicular to vector (0,NaN,0) regardless of tolerance");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicularWithTolerance_WhereZeroAndZero_ShouldBeFalse_Test()
+        {
+            Vector3 v1 = new Vector3(0, 0, 0);
+            Vector3 v2 = new Vector3(0, 0, 0);
+            var result = v1.IsPerpendicular(v2, 1);
+
+            result.Should().Be(false, "vector (0,0,0) is not perpendicular to vector (0,0,0) regardless of tolerance");
         }
 
         #endregion
