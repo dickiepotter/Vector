@@ -56,16 +56,10 @@
       <Project>{807FD959-E9BD-4C60-8A32-5BB04B8E79E0}</Project>
       <Name>RP.Math.Vector3</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RP.Math\RP.Math.csproj">
-      <Project>{AE16868E-5A0F-4CC7-BAEF-B3F1536D793D}</Project>
-      <Name>RP.Math</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExpandedDoubleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PexAssemblyInfo.cs" />
-    <Compile Include="DoubleExtensionTests.cs" />
     <Compile Include="Vector3Tests.cs" />
   </ItemGroup>
   <ItemGroup>

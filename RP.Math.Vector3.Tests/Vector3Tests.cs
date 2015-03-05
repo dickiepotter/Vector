@@ -13,16 +13,13 @@
     /// <summary>
     /// Unit tests for the <see cref="Vector3"/> class
     /// </summary>
-    /// TODO Test What happens when we try to get the angle of vectors with (inf, n, n) and NaN components. We may need to add AnngleOrDefault but that seems wrong when getting scalar results. Should be NaN.
-    /// TODO Fix IsPerpendicular
-    /// TODO Test the logic of Abs
     [TestClass]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class Vector3Tests
     {
         private const double ArbitaryTestDouble = 109.005;
 
-        private static readonly double Deg90AsRad = System.Math.PI / 2;
+        private const double Deg90AsRad = System.Math.PI / 2;
 
         #region Constructor tests
 
@@ -2324,26 +2321,10 @@
 
             // Check the tolerance on the angle
             var angle = v1.Angle(v2);
-            angle.AlmostEqualsWithAbsTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
+            Vector3.AlmostEqualsWithAbsTolerance(angle, Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
 
             // Check the actual result
             result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (1,0.001,0)");
-        }
-
-        [TestMethod, TestCategory("IsPerpendicular")]
-        public void IsPerpendicularWithTolerance_WhereUnitVectorsInfinitePositiveXYAndThereIsAnError_ShouldBeTrue_Test()
-        {
-            Vector3 v1 = new Vector3(0, double.PositiveInfinity, 0);
-            Vector3 v2 = new Vector3(double.PositiveInfinity, 0.001, 0); // with an error in Y that should produce a slightly off 90deg angle (as radians)
-
-            var result = v1.IsPerpendicular(v2, 0.001); // remember the tolerance should be for the angle in Rad compared to 90deg (as a rad)
-
-            // Check the tolerance on the angle after normalization
-            var angle = v1.NormalizeOrDefault().Angle(v2.NormalizeOrDefault());
-            angle.AlmostEqualsWithAbsTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
-
-            // Check the actual result
-            result.Should().Be(true, "vector (0,+inf,0) is perpendicular to vector (+inf,0.001,0)");
         }
 
         [TestMethod, TestCategory("IsPerpendicular")]

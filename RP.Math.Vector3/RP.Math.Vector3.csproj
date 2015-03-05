@@ -40,12 +40,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector3.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RP.Math\RP.Math.csproj">
-      <Project>{ae16868e-5a0f-4cc7-baef-b3f1536d793d}</Project>
-      <Name>RP.Math</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

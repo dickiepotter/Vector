@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RP.Math.Vector3.ComparisonH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RP.Math.Tests", "RP.Math.Vector3.Tests\RP.Math.Tests.csproj", "{81449F7F-67D3-44EE-8D1D-C9B39A76E6CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RP.Math", "RP.Math\RP.Math.csproj", "{AE16868E-5A0F-4CC7-BAEF-B3F1536D793D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{81449F7F-67D3-44EE-8D1D-C9B39A76E6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81449F7F-67D3-44EE-8D1D-C9B39A76E6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81449F7F-67D3-44EE-8D1D-C9B39A76E6CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE16868E-5A0F-4CC7-BAEF-B3F1536D793D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE16868E-5A0F-4CC7-BAEF-B3F1536D793D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE16868E-5A0F-4CC7-BAEF-B3F1536D793D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE16868E-5A0F-4CC7-BAEF-B3F1536D793D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
