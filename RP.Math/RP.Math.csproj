@@ -43,6 +43,7 @@
     <Compile Include="DoubleExtension.cs" />
     <Compile Include="ExpandedDouble.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tolerance.cs" />
     <Compile Include="UlongExtension.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
