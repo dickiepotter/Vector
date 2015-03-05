@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RP.Math.Vector3", "RP.Math.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RP.Math.Vector3.ComparisonHarness", "RP.Math.Vector3.ComparisonHarness\RP.Math.Vector3.ComparisonHarness.csproj", "{29ADFB9E-28E8-41CB-8BB7-875B0C326EEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RP.Math.Tests", "RP.Math.Vector3.Tests\RP.Math.Tests.csproj", "{81449F7F-67D3-44EE-8D1D-C9B39A76E6CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RP.Math.Vector3.Tests", "RP.Math.Vector3.Tests\RP.Math.Vector3.Tests.csproj", "{81449F7F-67D3-44EE-8D1D-C9B39A76E6CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
