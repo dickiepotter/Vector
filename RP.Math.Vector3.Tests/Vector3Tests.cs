@@ -14,7 +14,7 @@
     /// Unit tests for the <see cref="Vector3"/> class
     /// </summary>
     /// TODO Test What happens when we try to get the angle of vectors with (inf, n, n) and NaN components. We may need to add AnngleOrDefault but that seems wrong when getting scalar results. Should be NaN.
-    /// TODO Fix IsPerpendicular
+    /// TODO Rethink fix IsPerpendicular special case when near zero or infinty components.
     /// TODO Test the logic of Abs
     [TestClass]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
