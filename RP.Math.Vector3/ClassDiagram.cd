@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Struct Name="RP.Math.Vector3">
+    <Position X="8.25" Y="1.75" Width="4" />
+    <Members>
+      <Field Name="ARGUMENT_LENGTH" Hidden="true" />
+      <Field Name="ARGUMENT_TYPE" Hidden="true" />
+      <Field Name="ARGUMENT_VALUE" Hidden="true" />
+      <Field Name="INTERPOLATION_RANGE" Hidden="true" />
+      <Field Name="MAGNITUDE" Hidden="true" />
+      <Field Name="NEGATIVE_MAGNITUDE" Hidden="true" />
+      <Field Name="NON_VECTOR_COMPARISON" Hidden="true" />
+      <Field Name="NORMALIZE_0" Hidden="true" />
+      <Field Name="NORMALIZE_Inf" Hidden="true" />
+      <Field Name="NORMALIZE_NaN" Hidden="true" />
+      <Method Name="NormalizeOrNaN" Hidden="true" />
+      <Method Name="NormalizeSpecialCasesOrOrigional" Hidden="true" />
+      <Field Name="ORIGIN_VECTOR_MAGNITUDE" Hidden="true" />
+      <Field Name="POSITIONAL_VECTOR" Hidden="true" />
+      <Field Name="THREE_COMPONENTS" Hidden="true" />
+      <Field Name="UNIT_VECTOR" Hidden="true" />
+      <Field Name="x" Hidden="true" />
+      <Field Name="y" Hidden="true" />
+      <Field Name="z" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>iACgWQBJgJABCA0F+CeAIiREAYAUAoBIAEJiI8sYZyE=</HashCode>
+      <FileName>Vector3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
