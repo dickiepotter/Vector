@@ -1183,7 +1183,7 @@
         }
 
         [TestMethod]
-        public void ReflectionTest()
+        public void Reflection_WhereXis1AboutVectorWhereYisOne_ShouldBeVectorWhereXisNegativeOne_Test()
         {
             var a = new Vector3(1, 0, 0);
             var b = new Vector3(0, 1, 0);
@@ -1192,6 +1192,35 @@
             result.X.Should().Be(-1, "X should be -1");
             result.Y.Should().Be(0, "Y should be 0");
             result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        [TestMethod]
+        public void Reflection_WhereV1IsXNegative10Yis10AboutYAxisUnitVector_ShouldBeX10Y10_Test()
+        {
+            var a = new Vector3(-10, 10, 0);
+            var b = new Vector3(0, 1, 0); // about y unit vector
+            var result = a.Reflection(b);
+
+            result.X.Should().Be(10, "X should be 10");
+            result.Y.Should().Be(10, "Y should be 10");
+            result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        [TestMethod]
+        public void Reflection_WhereV1IsY10AboutX5Y5_ShouldBeX10_Test()
+        {
+            var a = new Vector3(0, 10, 0);
+            var b = new Vector3(5, 5, 0);
+            var result = a.Reflection(b);
+
+            result.X.Should().Be(10, "X should be 10");
+
+            // Epsilon is not tolerant enough
+            //result.Y.Should().BeInRange(-double.Epsilon, double.Epsilon, "Y should be 0 with a tolerance (double.epsilon)");
+            //result.Z.Should().BeInRange(-double.Epsilon, double.Epsilon, "Z should be 0 with a tolerance (double.epsilon)");
+
+            result.Y.Should().BeInRange(-1E-10, 1E-10, "Y should be 0 with a tolerance");
+            result.Z.Should().BeInRange(-1E-10, 1E-10, "Z should be 0 with a tolerance");
         }
 
         #endregion
