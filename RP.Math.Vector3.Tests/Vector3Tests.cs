@@ -2500,4 +2500,33 @@
 
         #endregion
     }
+
+    public static class Helper
+    {
+
+        /// <summary>
+        /// Comparator within an absolute tolerance
+        /// </summary>
+        /// <param name="a">The double to compare to</param>
+        /// <param name="b">The double to compare with</param>
+        /// <param name="maxAbsoluteError">The tolerance for the comparison compared against the difference of the two doubles</param>
+        /// <returns>Truth if the doubles are equal within a tolerance</returns>
+        /// <remarks>
+        /// Use this tolerant equality method if comparing against zero. The tolerance should be a small multiple of <see cref="double.Epsilon"/>.
+        /// Also, check that you are not comparing floats and doubles.
+        /// </remarks>
+        public static bool AlmostEqualsWithAbsTolerance(this double a, double b, double maxAbsoluteError)
+        {
+            double diff = Math.Abs(a - b);
+
+            if (a.Equals(b))
+            {
+                // shortcut, handles infinities
+                return true;
+            }
+
+            return diff <= maxAbsoluteError;
+        }
+
+    }
 }
