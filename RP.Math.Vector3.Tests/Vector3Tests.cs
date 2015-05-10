@@ -13,13 +13,16 @@
     /// <summary>
     /// Unit tests for the <see cref="Vector3"/> class
     /// </summary>
+    /// TODO Test What happens when we try to get the angle of vectors with (inf, n, n) and NaN components. We may need to add AnngleOrDefault but that seems wrong when getting scalar results. Should be NaN.
+    /// TODO Rethink fix IsPerpendicular special case when near zero or infinty components.
+    /// TODO Test the logic of Abs
     [TestClass]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class Vector3Tests
     {
         private const double ArbitaryTestDouble = 109.005;
 
-        private const double Deg90AsRad = System.Math.PI / 2;
+        private static readonly double Deg90AsRad = System.Math.PI / 2;
 
         #region Constructor tests
 
@@ -1180,7 +1183,7 @@
         }
 
         [TestMethod]
-        public void ReflectionTest()
+        public void Reflection_WhereXis1AboutVectorWhereYisOne_ShouldBeVectorWhereXisNegativeOne_Test()
         {
             var a = new Vector3(1, 0, 0);
             var b = new Vector3(0, 1, 0);
@@ -1189,6 +1192,35 @@
             result.X.Should().Be(-1, "X should be -1");
             result.Y.Should().Be(0, "Y should be 0");
             result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        [TestMethod]
+        public void Reflection_WhereV1IsXNegative10Yis10AboutYAxisUnitVector_ShouldBeX10Y10_Test()
+        {
+            var a = new Vector3(-10, 10, 0);
+            var b = new Vector3(0, 1, 0); // about y unit vector
+            var result = a.Reflection(b);
+
+            result.X.Should().Be(10, "X should be 10");
+            result.Y.Should().Be(10, "Y should be 10");
+            result.Z.Should().Be(0, "Z should be 0");
+        }
+
+        [TestMethod]
+        public void Reflection_WhereV1IsY10AboutX5Y5_ShouldBeX10_Test()
+        {
+            var a = new Vector3(0, 10, 0);
+            var b = new Vector3(5, 5, 0);
+            var result = a.Reflection(b);
+
+            result.X.Should().Be(10, "X should be 10");
+
+            // Epsilon is not tolerant enough
+            //result.Y.Should().BeInRange(-double.Epsilon, double.Epsilon, "Y should be 0 with a tolerance (double.epsilon)");
+            //result.Z.Should().BeInRange(-double.Epsilon, double.Epsilon, "Z should be 0 with a tolerance (double.epsilon)");
+
+            result.Y.Should().BeInRange(-1E-10, 1E-10, "Y should be 0 with a tolerance");
+            result.Z.Should().BeInRange(-1E-10, 1E-10, "Z should be 0 with a tolerance");
         }
 
         #endregion
@@ -2290,6 +2322,16 @@
         }
 
         [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicular_WhereZeroAndZero_ShouldBeFalse_Test()
+        {
+            Vector3 v1 = new Vector3(0, 0, 0);
+            Vector3 v2 = new Vector3(0, 0, 0);
+            var result = v1.IsPerpendicular(v2);
+
+            result.Should().Be(false, "vector (0,0,0) is not perpendicular to vector (0,0,0)");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
         public void IsPerpendicularWithTolerance_WhereUnitVectorsPositiveXYAndThereIsNoError_ShouldBeTrue_Test()
         {
             Vector3 v1 = new Vector3(0, 1, 0);
@@ -2321,10 +2363,31 @@
 
             // Check the tolerance on the angle
             var angle = v1.Angle(v2);
-            Vector3.AlmostEqualsWithAbsTolerance(angle, Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
+            angle.AlmostEqualsWithAbsTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
 
             // Check the actual result
             result.Should().Be(true, "vector (0,1,0) is perpendicular to vector (1,0.001,0)");
+        }
+
+        /// <summary>
+        /// Check that the special case vectors use the tolerance when determinitng if it is a apecial case.
+        /// Ignored: This should not work! The tolerance is for the dot product equality to 0 NOT for special case snap to zero.
+        /// We could add another parameter, i.e. SpecialCaseSnapToZeroTolerance but we are making special cases more complicated.
+        /// </summary>
+        [TestMethod, TestCategory("IsPerpendicular"), Ignore]
+        public void IsPerpendicularWithTolerance_WhereUnitVectorsInfinitePositiveXYAndThereIsAnError_ShouldBeTrue_Test()
+        {
+            Vector3 v1 = new Vector3(0, double.PositiveInfinity, 0);
+            Vector3 v2 = new Vector3(double.PositiveInfinity, 0.001, 0); // with an error in Y that should produce a slightly off 90deg angle (as radians)
+
+            var result = v1.IsPerpendicular(v2, 0.001); // remember the tolerance should be for the angle in Rad compared to 90deg (as a rad)
+
+            // Check the tolerance on the angle after normalization
+            var angle = v1.NormalizeOrDefault().Angle(v2.NormalizeOrDefault());
+            angle.AlmostEqualsWithAbsTolerance(Deg90AsRad, 0.001).Should().Be(true, string.Format("the angle between v1 and v2 should be 90 deg within 0.001 radians (found {0} rad)", angle));
+
+            // Check the actual result
+            result.Should().Be(true, "vector (0,+inf,0) is perpendicular to vector (+inf,0.001,0)");
         }
 
         [TestMethod, TestCategory("IsPerpendicular")]
@@ -2365,6 +2428,16 @@
             var result = v1.IsPerpendicular(v2, 1);
 
             result.Should().Be(false, "vector (NaN,0,0) is not perpendicular to vector (0,NaN,0) regardless of tolerance");
+        }
+
+        [TestMethod, TestCategory("IsPerpendicular")]
+        public void IsPerpendicularWithTolerance_WhereZeroAndZero_ShouldBeFalse_Test()
+        {
+            Vector3 v1 = new Vector3(0, 0, 0);
+            Vector3 v2 = new Vector3(0, 0, 0);
+            var result = v1.IsPerpendicular(v2, 1);
+
+            result.Should().Be(false, "vector (0,0,0) is not perpendicular to vector (0,0,0) regardless of tolerance");
         }
 
         #endregion

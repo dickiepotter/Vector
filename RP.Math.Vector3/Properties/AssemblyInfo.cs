@@ -11,9 +11,7 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("6963a3a8-8620-49dd-a117-90ee7a68d330")]
 
-[assembly: AssemblyVersion("1.2.0.0")]
-[assembly: AssemblyFileVersion("1.2.0.0")]
+[assembly: AssemblyVersion("1.3.0.0")]
+[assembly: AssemblyFileVersion("1.3.0.0")]
 [assembly: InternalsVisibleTo("RP.Math.Vector3.Tests")]
-[assembly: InternalsVisibleTo("RP.Math.Vector31.Tests")]
-[assembly: InternalsVisibleTo("RP.Math.Vector3.Explorables")]
 
