@@ -140,6 +140,10 @@ publish/
 # If using the old MSBuild-Integrated Package Restore, uncomment this:
 #!**/packages/repositories.config
 
+# NuGet Package Auto-Restore
+# Don't exclude anything from here - We want the .exe
+!.nuget/*
+
 # Windows Azure Build Output
 csx/
 *.build.csdef
