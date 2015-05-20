@@ -138,7 +138,7 @@ publish/
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 # If using the old MSBuild-Integrated Package Restore, uncomment this:
-#!**/packages/repositories.config
+!**/packages/repositories.config
 
 # NuGet Package Auto-Restore
 # Don't exclude anything from here - We want the .exe
