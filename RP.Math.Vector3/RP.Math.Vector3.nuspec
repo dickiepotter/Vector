@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RP.Math.Vector3</id>
+    <version>1.3.0.0</version>
+    <title>Vector3</title>
+    <description>A Vector Type for C#</description>
+    <authors>Richard Potter</authors>
+    <owners>Richard Potter</owners>
+    <language>en-gb</language>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/dickiepotter/Vector</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>Initial Nuget Package</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Vector Math C# .Net</tags>
+  </metadata>
+  
+  <files>
+    <file src="bin\$configuration$\*.dll" target="lib" />
+    <file src="bin\$configuration$\*.pdb" target="lib" />
+  </files>
+</package>
