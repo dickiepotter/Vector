@@ -1520,3 +1520,7 @@ Done:
 - Added for completeness: `ComponentMin`/`ComponentMax`, `Clamp`, `DistanceSquared`,
   `ClampMagnitude`, `MoveTowards`, `Slerp`, `MagnitudeSquared`, `IsZero`, tuple
   deconstruction/conversion, and an interactive Blazor WebAssembly visualizer.
+
+## Licence and disclaimer
+
+This is a personal project by Richard Potter, shared in the hope it's useful. It's free to use under the Code Project Open License (CPOL) 1.02 (see [LICENSE.txt](LICENSE.txt)). It's provided as is: I make no promises that it works or suits your purpose, and I take no responsibility for anything that happens from using it. It isn't a product of, or supported by, any company I work for.
